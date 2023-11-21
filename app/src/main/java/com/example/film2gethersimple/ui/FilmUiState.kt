@@ -9,5 +9,6 @@ data class FilmUiState(
     //Boolean flag of showing home page
     val isShowingHomePage: Boolean = true,
     //Films, that shown in homepage and information about it
-    val allFilms: List<Film> = emptyList()
+    val allFilms: List<Film> = emptyList(),
+
 )

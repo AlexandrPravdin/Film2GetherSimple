@@ -52,7 +52,7 @@ fun DetailScreen(
     }
     //Information about film
     Column(
-        modifier = Modifier.padding(16.dp)
+        modifier = Modifier.padding(16.dp).background(MaterialTheme.colorScheme.background)
     ) {
         Spacer(modifier = modifier.padding(contentPadding))
         //Row with name and rating of film

@@ -57,7 +57,6 @@ fun HomeFilmScreen(
             film = uiState.currentSelectedFilm,
             onBackPressed = onDetailsBackScreenPressed,
             contentPadding = contentPadding,
-            modifier = Modifier.background(MaterialTheme.colorScheme.background)
         )
     }
 
@@ -89,6 +88,7 @@ fun HomeScreenColumn(
         ), //contentPadding
 
         verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier.background(MaterialTheme.colorScheme.background)
     )
 }
 

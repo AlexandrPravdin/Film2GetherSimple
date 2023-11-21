@@ -8,7 +8,7 @@ object LocalFilmsDataProvider {
     val allFilms = listOf<Film>(
         Film(
             name = R.string.the_shawshank_redemption,
-            image = R.drawable.shawshank_image,
+            image = R.drawable.shawshank_image2,
             description = R.string.the_shawshank_redemption_description,
             genres = setOf(Genres.Drama),
             iMDbRate = 9.2,

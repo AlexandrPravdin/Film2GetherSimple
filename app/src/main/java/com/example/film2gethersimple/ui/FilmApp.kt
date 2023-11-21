@@ -19,21 +19,25 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.film2gethersimple.data.Film
 
 //App at all
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilmApp(
     modifier: Modifier = Modifier,
 ) {
     val viewModel: FilmViewModel = viewModel()
     val homeUiState = viewModel.uiState.collectAsState().value
+
+
     //Film screen with Home and Details screen
-    Scaffold(topBar = {
+    Scaffold(
+        topBar = {
         topAppBar(title = homeUiState.currentSelectedFilm.name,
             isShowingDetails = !homeUiState.isShowingHomePage,
             onBackButtonClicked = { viewModel.goingToHomePage() }
         )
     }) { innerPadding ->
         HomeFilmScreen(
-            uiState = homeUiState,
+            uiState = homeUiState, //How better? State or List of Films from this State??
             onHomeScreenCardClick = { film: Film -> viewModel.updateDetailsScreenStates(film) },
             onDetailsBackScreenPressed = { viewModel.goingToHomePage() },
             contentPadding = innerPadding
@@ -42,6 +46,7 @@ fun FilmApp(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun topAppBar(
     @StringRes title: Int,
