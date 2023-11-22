@@ -1,14 +1,17 @@
 package com.example.film2gethersimple.data
 
+import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.example.film2gethersimple.R
 
 enum class BottomNavigationScreens(
-    val icon: ImageVector
+    val icon: ImageVector,
+    @StringRes val title: Int
 ) {
-    HomeScreen(Icons.Filled.Home),
-    AccountScreen(Icons.Filled.AccountCircle)
+    HomeScreen(Icons.Filled.Home, R.string.home_screen),
+    AccountScreen(Icons.Filled.AccountCircle, R.string.account_screen)
 
 }

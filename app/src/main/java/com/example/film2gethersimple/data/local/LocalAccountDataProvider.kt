@@ -7,17 +7,17 @@ object LocalAccountDataProvider {
 
     //Account with real data
     val account: Account = Account(
-        firstName = R.string.account_first_name,
-        secondName = R.string.account_second_name,
+        firstName = "Alexandr",
+        secondName = "Pravdin",
         image = R.drawable.account_image,
-        mail = R.string.account_email
+        mail = "alex.pravdinn@gmail.com"
     )
 
     //Default account for uiState initialization
     val default: Account = Account(
-        firstName = -1,
-        secondName = -1,
+        firstName = "",
+        secondName = "",
         image = -1,
-        mail = -1
+        mail = ""
     )
 }

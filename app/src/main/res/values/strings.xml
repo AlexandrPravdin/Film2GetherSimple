@@ -21,13 +21,12 @@
     <string name="a_meek_hobbit_from_the_shire_and_eight_companions_set_out_on_a_journey_to_destroy_the_powerful_one_ring_and_save_middle_earth_from_the_dark_lord_sauron">A meek Hobbit from the Shire and eight companions set out on a journey to destroy the powerful One Ring and save Middle-earth from the Dark Lord Sauron.</string>
     <string name="the_good_the_bad_and_the_ugly">The Good, the Bad and the Ugly</string>
     <string name="a_bounty_hunting_scam_joins_two_men_in_an_uneasy_alliance_against_a_third_in_a_race_to_find_a_fortune_in_gold_buried_in_a_remote_cemetery">A bounty hunting scam joins two men in an uneasy alliance against a third in a race to find a fortune in gold buried in a remote cemetery.</string>
-    <string name="account_first_name">Alexandr</string>
-    <string name="account_second_name">Pravdin</string>
-    <string name="account_email">alex.pravdinn@gmail.com</string>
     <string name="films">Films</string>
     <string name="account_information">Account Information</string>
     <string name="account_image">Account Image</string>
     <string name="star">Star</string>
+    <string name="home_screen">Home</string>
+    <string name="account_screen">Account</string>
 
 
 </resources>

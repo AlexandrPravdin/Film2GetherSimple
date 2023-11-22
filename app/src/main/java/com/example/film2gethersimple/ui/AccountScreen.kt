@@ -31,45 +31,57 @@ fun AccountScreen(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
+        modifier = modifier
             .background(MaterialTheme.colorScheme.background)
             .fillMaxSize(),
         verticalArrangement = Arrangement.Center
     ) {
-        Image(
-            painter = painterResource(id = account.image),
-            contentDescription = stringResource(R.string.account_image),
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .padding(bottom = 16.dp)
-
-                .size(200.dp)
-                .clip(CircleShape)
-                .border(
-                    BorderStroke(4.dp, MaterialTheme.colorScheme.primary), CircleShape
-                ),
-        )
-        Text(
-            text = stringResource(id = account.firstName)
-                    + " "
-                    + stringResource(id = account.secondName),
-            modifier = Modifier.padding(bottom = 16.dp),
-            style = MaterialTheme.typography.displaySmall
-        )
-        Text(text = stringResource(id = account.mail))
+        AccountImage(account = account)
+        AccountName(account = account)
+        Text(text = account.mail)
     }
 }
 
+@Composable
+fun AccountImage(
+    account: Account,
+    modifier: Modifier = Modifier
+) {
+    Image(
+        painter = painterResource(id = account.image),
+        contentDescription = stringResource(R.string.account_image),
+        contentScale = ContentScale.Crop,
+        modifier = modifier
+            .padding(bottom = 16.dp)
+            .size(200.dp)
+            .clip(CircleShape)
+            .border(
+                BorderStroke(4.dp, MaterialTheme.colorScheme.primary), CircleShape
+            ),
+    )
+}
+
+@Composable
+fun AccountName(
+    account: Account,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        text = "${account.firstName} ${account.secondName}",
+        modifier = modifier.padding(bottom = 16.dp),
+        style = MaterialTheme.typography.displaySmall
+    )
+}
 
 @Preview(showBackground = true)
 @Composable
 fun AccountScreenPreview() {
     AccountScreen(
         account = Account(
-            firstName = R.string.account_first_name,
-            secondName = R.string.account_second_name,
+            firstName = "Alexandr",
+            secondName = "Pravdin",
             image = R.drawable.godfather_2_image,
-            mail = R.string.account_email
+            mail = "Alex.pravdinn@gmail.com".lowercase()
         )
     )
 }

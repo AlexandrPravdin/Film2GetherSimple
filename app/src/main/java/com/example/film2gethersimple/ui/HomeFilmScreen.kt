@@ -40,10 +40,10 @@ import com.example.film2gethersimple.data.Film
 //Home screen have column with all films
 @Composable
 fun HomeFilmScreen(
-    modifier: Modifier = Modifier,
     uiState: FilmUiState,
     onHomeScreenCardClick: (Film) -> Unit,
     onDetailsBackScreenPressed: () -> Unit,
+    modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
     //Moving to detail screen
@@ -144,7 +144,6 @@ fun FilmCard(
             }
 
         }
-
     }
 }
 
