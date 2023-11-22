@@ -32,6 +32,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.film2gethersimple.R
 import com.example.film2gethersimple.data.BottomNavigationScreens
 import com.example.film2gethersimple.data.Film
 import com.example.film2gethersimple.ui.utils.ContentType
@@ -41,10 +42,14 @@ import com.example.film2gethersimple.ui.utils.NavigationType
 @Composable
 fun FilmMainScreen(
     uiState: FilmUiState,
-    viewModel: FilmViewModel,
     navController: NavHostController,
     navigationType: NavigationType,
     contentType: ContentType,
+    onBackButtonClicked: () -> Unit,
+    goingHomeFunction: () -> Unit,
+    onHomeScreenCardClick: (Film) -> Unit,
+
+
     modifier: Modifier = Modifier,
 ) {
     //Current screen
@@ -67,12 +72,12 @@ fun FilmMainScreen(
                     TopFilmAppBar(
                         title = uiState.topAppBarTitle,
                         isShowingBackButton = !uiState.isShowingHomePage /*&& contentType == ContentType.ListOnly*/,
-                        onBackButtonClicked = { viewModel.goingToHomePage() }//On button clicked should to refactor
+                        onBackButtonClicked = onBackButtonClicked //On button clicked should to refactor
                     )
                 }
                 //Top app bar for AccountScreen
                 BottomNavigationScreens.AccountScreen -> {
-                    TopFilmAppBar(title = uiState.topAppBarTitle,
+                    TopFilmAppBar(title = R.string.account_screen,
                         isShowingBackButton = false,
                         onBackButtonClicked = {})
                 }
@@ -84,8 +89,7 @@ fun FilmMainScreen(
             if (navigationType == NavigationType.BOTTOM_NAVIGATION && uiState.isShowingHomePage) {
                 BottomFilmAppBar(
                     navController = navController,
-                    viewModel = viewModel,
-                    screens = screens
+                    screens = screens,
                 )
             }
         },
@@ -95,31 +99,33 @@ fun FilmMainScreen(
             Row {
                 FilmNavigationRail(
                     navController = navController,
-                    viewModel = viewModel,
                     screens = screens,
-                    contentPadding = innerPadding
+                    contentPadding = innerPadding,
                 )
                 AppNavHost(
                     navController = navController,
                     uiState = uiState,
-                    viewModel = viewModel,
-                    contentPadding = innerPadding
+                    contentPadding = innerPadding,
+                    onHomeScreenCardClick = onHomeScreenCardClick,
+                    goingHomeFunction = goingHomeFunction
                 )
             }
         } else if (navigationType == NavigationType.PERMANENT_NAVIGATION_DRAWER && uiState.isShowingHomePage) {
             FilmPermanentDrawer(
                 navController = navController,
-                viewModel = viewModel,
                 screens = screens,
                 contentPadding = innerPadding,
-                uiState = uiState
+                uiState = uiState,
+                goingHomeFunction = goingHomeFunction,
+                onHomeScreenCardClick = onHomeScreenCardClick,
             )
         } else {
             AppNavHost(
                 navController = navController,
                 uiState = uiState,
-                viewModel = viewModel,
-                contentPadding = innerPadding
+                contentPadding = innerPadding,
+                goingHomeFunction = goingHomeFunction,
+                onHomeScreenCardClick = onHomeScreenCardClick
             )
         }
 
@@ -132,24 +138,23 @@ fun AppNavHost(
     navController: NavHostController,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     uiState: FilmUiState,
-    viewModel: FilmViewModel,
+    onHomeScreenCardClick: (Film) -> Unit,
+    goingHomeFunction: () -> Unit,
 
 
     ) {
     NavHost(
         navController = navController,
         startDestination = BottomNavigationScreens.HomeScreen.name,
-        modifier = modifier.padding(contentPadding)
+        modifier = modifier.padding(contentPadding),
     ) {
         composable(BottomNavigationScreens.HomeScreen.name) {
             HomeFilmScreen(
                 uiState = uiState,
                 onHomeScreenCardClick = { film: Film ->
-                    viewModel.updateDetailsScreenStates(
-                        film
-                    )
+                    onHomeScreenCardClick(film)
                 },
-                onDetailsBackScreenPressed = { viewModel.goingToHomePage() },
+                onDetailsBackScreenPressed = goingHomeFunction,
             )
         }
         composable(BottomNavigationScreens.AccountScreen.name) {
@@ -192,7 +197,6 @@ fun TopFilmAppBar(
 @Composable
 fun BottomFilmAppBar(
     navController: NavHostController,
-    viewModel: FilmViewModel,
     screens: List<BottomNavigationScreens>,
     modifier: Modifier = Modifier
 ) {
@@ -209,15 +213,6 @@ fun BottomFilmAppBar(
                         }
                         restoreState = true
                         launchSingleTop = true
-                    }
-                    when (screen) {
-                        BottomNavigationScreens.HomeScreen -> {
-                            viewModel.goingToHomePage()
-                        }
-
-                        BottomNavigationScreens.AccountScreen -> {
-                            viewModel.goingToAccountPage()
-                        }
                     }
                 },
                 icon = {
@@ -236,7 +231,6 @@ fun BottomFilmAppBar(
 fun FilmNavigationRail(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    viewModel: FilmViewModel,
     screens: List<BottomNavigationScreens>,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 
@@ -256,15 +250,6 @@ fun FilmNavigationRail(
                         restoreState = true
                         launchSingleTop = true
                     }
-                    when (screen) {
-                        BottomNavigationScreens.HomeScreen -> {
-                            viewModel.goingToHomePage()
-                        }
-
-                        BottomNavigationScreens.AccountScreen -> {
-                            viewModel.goingToAccountPage()
-                        }
-                    }
                 },
                 icon = {
                     Icon(
@@ -281,9 +266,10 @@ fun FilmNavigationRail(
 @Composable
 fun FilmPermanentDrawer(
     navController: NavHostController,
-    viewModel: FilmViewModel,
     screens: List<BottomNavigationScreens>,
     uiState: FilmUiState,
+    goingHomeFunction: () -> Unit,
+    onHomeScreenCardClick: (Film) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
@@ -299,7 +285,6 @@ fun FilmPermanentDrawer(
                     ScreensPermanentDrawerItem(
                         screen = screen,
                         navController = navController,
-                        viewModel = viewModel
                     )
                 }
             }
@@ -307,8 +292,9 @@ fun FilmPermanentDrawer(
         AppNavHost(
             navController = navController,
             uiState = uiState,
-            viewModel = viewModel,
-            contentPadding = contentPadding
+            contentPadding = contentPadding,
+            goingHomeFunction = goingHomeFunction,
+            onHomeScreenCardClick = onHomeScreenCardClick,
         )
     }
 }
@@ -319,7 +305,6 @@ fun FilmPermanentDrawer(
 fun ScreensPermanentDrawerItem(
     screen: BottomNavigationScreens,
     navController: NavHostController,
-    viewModel: FilmViewModel,
     modifier: Modifier = Modifier
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -343,15 +328,6 @@ fun ScreensPermanentDrawerItem(
                 }
                 restoreState = true
                 launchSingleTop = true
-            }
-            when (screen) {
-                BottomNavigationScreens.HomeScreen -> {
-                    viewModel.goingToHomePage()
-                }
-
-                BottomNavigationScreens.AccountScreen -> {
-                    viewModel.goingToAccountPage()
-                }
             }
         }
     )

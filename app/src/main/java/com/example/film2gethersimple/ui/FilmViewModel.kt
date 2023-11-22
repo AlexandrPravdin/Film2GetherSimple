@@ -19,7 +19,6 @@ class FilmViewModel : ViewModel() {
         initializeUIState()
     }
 
-
     private fun initializeUIState() {
         _uiState.value = FilmUiState(
             currentSelectedFilm = allFilms[0],

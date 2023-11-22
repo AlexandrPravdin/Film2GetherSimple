@@ -48,14 +48,17 @@ fun FilmApp(
             contentType = ContentType.ListOnly
         }
     }
+
     //Film screen with Home and Details screen
     FilmMainScreen(
         uiState = homeUiState,
-        viewModel = viewModel,
         navController = navController,
         navigationType = navigationType,
         contentType = contentType,
-        modifier = modifier
+        modifier = modifier,
+        goingAccountFunction = { viewModel.goingToHomePage() },
+        goingHomeFunction = { viewModel.goingToAccountPage() },
+        onBackButtonClicked = { viewModel.goingToHomePage() },
+        onHomeScreenCardClick = { viewModel.updateDetailsScreenStates(it) },
     )
-
 }
