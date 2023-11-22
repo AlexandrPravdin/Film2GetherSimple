@@ -1,7 +1,6 @@
 package com.example.film2gethersimple.ui
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,9 +18,9 @@ import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Star
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,22 +38,21 @@ import com.example.film2gethersimple.data.Genres
 
 
 //DetailsScreen where user see film information
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DetailScreen(
     film: Film,
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues
 ) {
     BackHandler {
         onBackPressed()
     }
     //Information about film
     Column(
-        modifier = Modifier.padding(16.dp).background(MaterialTheme.colorScheme.background)
+        modifier = Modifier
+            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+            .background(MaterialTheme.colorScheme.background)
     ) {
-        Spacer(modifier = modifier.padding(contentPadding))
         //Row with name and rating of film
         NameAndRateRow(
             filmName = film.name,
@@ -72,12 +70,12 @@ fun DetailScreen(
 //      LazyHorizontalStaggeredGrid with film genres
         LazyVerticalStaggeredGrid(modifier = Modifier.fillMaxWidth(1f),
             verticalItemSpacing = 4.dp,
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
             //columns = StaggeredGridCells.Fixed(3),
             columns = StaggeredGridCells.Adaptive(minSize = 150.dp),
             content = {
                 items(film.genres.toList()) { genre ->
-                    Button(
+                    OutlinedButton(
                         onClick = {},
                     ) {
                         Text(
@@ -108,7 +106,9 @@ fun DetailScreen(
 
 @Composable
 fun NameAndRateRow(
-    modifier: Modifier = Modifier, filmName: Int, filmRate: Double
+    modifier: Modifier = Modifier,
+    filmName: Int,
+    filmRate: Double
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -151,7 +151,7 @@ fun NameAndRateRow(
 @Preview(showBackground = true)
 @Composable
 fun NameAndRateRowPreview() {
-    val film: Film = Film(
+    val film = Film(
         name = R.string.the_shawshank_redemption,
         image = R.drawable.shawshank_image,
         description = R.string.the_shawshank_redemption_description,
@@ -165,7 +165,7 @@ fun NameAndRateRowPreview() {
 @Preview(showBackground = true, widthDp = 450)
 @Composable
 fun FilmDetailPreview() {
-    val film: Film = Film(
+    val film = Film(
         name = R.string.the_shawshank_redemption,
         image = R.drawable.shawshank_image,
         description = R.string.the_shawshank_redemption_description,
@@ -181,7 +181,6 @@ fun FilmDetailPreview() {
     DetailScreen(
         film = film,
         onBackPressed = {},
-        contentPadding = PaddingValues(0.dp),
         modifier = Modifier.background(MaterialTheme.colorScheme.background)
     )
 }

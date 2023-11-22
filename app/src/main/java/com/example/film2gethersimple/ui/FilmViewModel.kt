@@ -1,7 +1,9 @@
 package com.example.film2gethersimple.ui
 
 import androidx.lifecycle.ViewModel
+import com.example.film2gethersimple.R
 import com.example.film2gethersimple.data.Film
+import com.example.film2gethersimple.data.local.LocalAccountDataProvider.account
 import com.example.film2gethersimple.data.local.LocalFilmsDataProvider.allFilms
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,7 +23,9 @@ class FilmViewModel : ViewModel() {
     private fun initializeUIState() {
         _uiState.value = FilmUiState(
             currentSelectedFilm = allFilms[0],
-            allFilms = allFilms
+            allFilms = allFilms,
+            account = account,
+            topAppBarTitle = (R.string.films)
         )
     }
 
@@ -30,7 +34,8 @@ class FilmViewModel : ViewModel() {
         _uiState.update {
             it.copy(
                 currentSelectedFilm = film,
-                isShowingHomePage = false
+                isShowingHomePage = false,
+                topAppBarTitle = film.name
             )
         }
     }
@@ -38,7 +43,16 @@ class FilmViewModel : ViewModel() {
     fun goingToHomePage() {
         _uiState.update {
             it.copy(
-                isShowingHomePage = true
+                isShowingHomePage = true,
+                topAppBarTitle = R.string.films
+            )
+        }
+    }
+
+    fun goingToAccountPage() {
+        _uiState.update {
+            it.copy(
+                topAppBarTitle = R.string.account_information
             )
         }
     }

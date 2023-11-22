@@ -55,8 +55,7 @@ fun HomeFilmScreen(
     } else {
         DetailScreen(
             film = uiState.currentSelectedFilm,
-            onBackPressed = onDetailsBackScreenPressed,
-            contentPadding = contentPadding,
+            onBackPressed = onDetailsBackScreenPressed
         )
     }
 
@@ -158,7 +157,7 @@ fun HomeFilmScreenPreview() {
 
 @Preview(showBackground = true)
 @Composable
-fun filmCardPreview() {
+fun FilmCardPreview() {
     val viewModel: FilmViewModel = viewModel()
     val homeUiState = viewModel.uiState.collectAsState().value
     val film = homeUiState.allFilms[0]
