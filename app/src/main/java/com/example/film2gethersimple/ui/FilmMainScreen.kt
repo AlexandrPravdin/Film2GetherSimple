@@ -48,8 +48,6 @@ fun FilmMainScreen(
     onBackButtonClicked: () -> Unit,
     goingHomeFunction: () -> Unit,
     onHomeScreenCardClick: (Film) -> Unit,
-
-
     modifier: Modifier = Modifier,
 ) {
     //Current screen

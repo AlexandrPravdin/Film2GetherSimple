@@ -56,7 +56,6 @@ fun FilmApp(
         navigationType = navigationType,
         contentType = contentType,
         modifier = modifier,
-        goingAccountFunction = { viewModel.goingToHomePage() },
         goingHomeFunction = { viewModel.goingToAccountPage() },
         onBackButtonClicked = { viewModel.goingToHomePage() },
         onHomeScreenCardClick = { viewModel.updateDetailsScreenStates(it) },
