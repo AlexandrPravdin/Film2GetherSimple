@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -42,14 +43,15 @@ fun FilmApp(
 
     //navigation architecture
     val navController = rememberNavController()
-    val screens = listOf(
-        BottomNavigationScreens.HomeScreen,
-        BottomNavigationScreens.AccountScreen,
-    )
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = BottomNavigationScreens.valueOf(
         backStackEntry?.destination?.route ?: BottomNavigationScreens.HomeScreen.name
     )
+    val screens = listOf(
+        BottomNavigationScreens.HomeScreen,
+        BottomNavigationScreens.AccountScreen,
+    )
+
     //Film screen with Home and Details screen
     Scaffold(
         topBar = {
@@ -68,42 +70,13 @@ fun FilmApp(
                         onBackButtonClicked = {})
                 }
             }
-
         },
         bottomBar = {
-            BottomAppBar(modifier = Modifier.height(60.dp)) {
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                val currentDestination = navBackStackEntry?.destination
-                screens.forEach { screen ->
-                    BottomNavigationItem(
-                        selected = currentDestination?.hierarchy?.any { it.route == screen.name } == true,
-                        onClick = {
-                            navController.navigate(screen.name) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                restoreState = true
-                                launchSingleTop = true
-                            }
-                            when (screen) {
-                                BottomNavigationScreens.HomeScreen -> {
-                                    viewModel.goingToHomePage()
-                                }
-
-                                BottomNavigationScreens.AccountScreen -> {
-                                    viewModel.goingToAccountPage()
-                                }
-                            }
-                        },
-                        icon = {
-                            Icon(
-                                screen.icon,
-                                contentDescription = null,
-                            )
-                        },
-                    )
-                }
-            }
+            BottomFilmAppBar(
+                navController = navController,
+                viewModel = viewModel,
+                screens = screens
+            )
         }
 
     ) { innerPadding ->
@@ -129,6 +102,47 @@ fun FilmApp(
     }
 }
 
+@Composable
+fun BottomFilmAppBar(
+    navController: NavHostController,
+    viewModel: FilmViewModel,
+    screens: List<BottomNavigationScreens>
+) {
+
+    BottomAppBar(modifier = Modifier.height(60.dp)) {
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentDestination = navBackStackEntry?.destination
+        screens.forEach { screen ->
+            BottomNavigationItem(
+                selected = currentDestination?.hierarchy?.any { it.route == screen.name } == true,
+                onClick = {
+                    navController.navigate(screen.name) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        restoreState = true
+                        launchSingleTop = true
+                    }
+                    when (screen) {
+                        BottomNavigationScreens.HomeScreen -> {
+                            viewModel.goingToHomePage()
+                        }
+
+                        BottomNavigationScreens.AccountScreen -> {
+                            viewModel.goingToAccountPage()
+                        }
+                    }
+                },
+                icon = {
+                    Icon(
+                        screen.icon,
+                        contentDescription = null,
+                    )
+                },
+            )
+        }
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

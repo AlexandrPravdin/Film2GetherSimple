@@ -33,6 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.film2gethersimple.R
 import com.example.film2gethersimple.data.Film
 
 
@@ -116,7 +117,7 @@ fun FilmCard(
         {
             Image(
                 painter = painterResource(id = image),
-                contentDescription = null,
+                contentDescription = stringResource(id = name),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(100.dp)
@@ -129,11 +130,15 @@ fun FilmCard(
                     style = MaterialTheme.typography.titleMedium
                 )
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Outlined.Star, contentDescription = "Star")
+                    Icon(
+                        Icons.Outlined.Star,
+                        contentDescription = stringResource(id = R.string.star)
+                    )
                     Text(
                         text = iMDbRate.toString(),
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
-                        style = MaterialTheme.typography.bodyLarge
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.padding(top = 4.dp, start = 4.dp)
                     )
                 }
             }

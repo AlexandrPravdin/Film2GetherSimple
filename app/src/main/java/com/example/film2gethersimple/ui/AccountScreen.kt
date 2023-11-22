@@ -38,7 +38,7 @@ fun AccountScreen(
     ) {
         Image(
             painter = painterResource(id = account.image),
-            contentDescription = "Account Image",
+            contentDescription = stringResource(R.string.account_image),
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .padding(bottom = 16.dp)

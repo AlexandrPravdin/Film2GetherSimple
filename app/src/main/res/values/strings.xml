@@ -26,6 +26,8 @@
     <string name="account_email">alex.pravdinn@gmail.com</string>
     <string name="films">Films</string>
     <string name="account_information">Account Information</string>
+    <string name="account_image">Account Image</string>
+    <string name="star">Star</string>
 
 
 </resources>

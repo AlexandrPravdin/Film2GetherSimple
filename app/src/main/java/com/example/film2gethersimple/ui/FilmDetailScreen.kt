@@ -5,9 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -86,7 +84,7 @@ fun DetailScreen(
             })
         Image(
             painter = painterResource(id = film.image),
-            contentDescription = null,
+            contentDescription = stringResource(id = film.name),
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxSize()
@@ -128,7 +126,7 @@ fun NameAndRateRow(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(start = 8.dp)
         ) {
-            Icon(Icons.Outlined.Star, contentDescription = "Star")
+            Icon(Icons.Outlined.Star, contentDescription = stringResource(R.string.star))
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
