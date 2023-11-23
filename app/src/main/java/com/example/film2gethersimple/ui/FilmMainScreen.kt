@@ -112,7 +112,7 @@ fun FilmMainScreen(
                     contentType = contentType
                 )
             }
-        } else if (navigationType == NavigationType.PERMANENT_NAVIGATION_DRAWER && uiState.isShowingHomePage) {
+        } else if (navigationType == NavigationType.PERMANENT_NAVIGATION_DRAWER) {
             FilmPermanentDrawer(
                 navController = navController,
                 screens = screens,
@@ -339,6 +339,8 @@ fun ScreensPermanentDrawerItem(
     )
 }
 
+
+//List and detail screen for big screen monitors
 @Composable
 fun FilmListAndDetailScreen(
     allFilms: List<Film>,
