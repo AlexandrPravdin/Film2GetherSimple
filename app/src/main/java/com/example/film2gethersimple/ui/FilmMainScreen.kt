@@ -22,10 +22,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -69,7 +72,7 @@ fun FilmMainScreen(
                 BottomNavigationScreens.HomeScreen -> {
                     TopFilmAppBar(
                         title = uiState.topAppBarTitle,
-                        isShowingBackButton = !uiState.isShowingHomePage /*&& contentType == ContentType.ListOnly*/,
+                        isShowingBackButton = !uiState.isShowingHomePage && contentType != ContentType.ListAndDetails,
                         onBackButtonClicked = onBackButtonClicked //On button clicked should to refactor
                     )
                 }
@@ -105,7 +108,8 @@ fun FilmMainScreen(
                     uiState = uiState,
                     contentPadding = innerPadding,
                     onHomeScreenCardClick = onHomeScreenCardClick,
-                    goingHomeFunction = goingHomeFunction
+                    goingHomeFunction = goingHomeFunction,
+                    contentType = contentType
                 )
             }
         } else if (navigationType == NavigationType.PERMANENT_NAVIGATION_DRAWER && uiState.isShowingHomePage) {
@@ -116,6 +120,7 @@ fun FilmMainScreen(
                 uiState = uiState,
                 goingHomeFunction = goingHomeFunction,
                 onHomeScreenCardClick = onHomeScreenCardClick,
+                contentType = contentType,
             )
         } else {
             AppNavHost(
@@ -123,7 +128,9 @@ fun FilmMainScreen(
                 uiState = uiState,
                 contentPadding = innerPadding,
                 goingHomeFunction = goingHomeFunction,
-                onHomeScreenCardClick = onHomeScreenCardClick
+                onHomeScreenCardClick = onHomeScreenCardClick,
+                contentType = contentType
+
             )
         }
 
@@ -132,15 +139,14 @@ fun FilmMainScreen(
 
 @Composable
 fun AppNavHost(
-    modifier: Modifier = Modifier,
     navController: NavHostController,
-    contentPadding: PaddingValues = PaddingValues(0.dp),
     uiState: FilmUiState,
     onHomeScreenCardClick: (Film) -> Unit,
     goingHomeFunction: () -> Unit,
-
-
-    ) {
+    contentType: ContentType,
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
+) {
     NavHost(
         navController = navController,
         startDestination = BottomNavigationScreens.HomeScreen.name,
@@ -153,6 +159,7 @@ fun AppNavHost(
                     onHomeScreenCardClick(film)
                 },
                 onDetailsBackScreenPressed = goingHomeFunction,
+                contentType = contentType
             )
         }
         composable(BottomNavigationScreens.AccountScreen.name) {
@@ -167,7 +174,6 @@ fun AppNavHost(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopFilmAppBar(
-
     @StringRes title: Int,
     modifier: Modifier = Modifier,
     isShowingBackButton: Boolean = false,
@@ -268,6 +274,7 @@ fun FilmPermanentDrawer(
     uiState: FilmUiState,
     goingHomeFunction: () -> Unit,
     onHomeScreenCardClick: (Film) -> Unit,
+    contentType: ContentType,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
@@ -293,6 +300,7 @@ fun FilmPermanentDrawer(
             contentPadding = contentPadding,
             goingHomeFunction = goingHomeFunction,
             onHomeScreenCardClick = onHomeScreenCardClick,
+            contentType = contentType,
         )
     }
 }
@@ -328,6 +336,37 @@ fun ScreensPermanentDrawerItem(
                 launchSingleTop = true
             }
         }
+    )
+}
+
+@Composable
+fun FilmListAndDetailScreen(
+    allFilms: List<Film>,
+    currentFilm: Film,
+    onHomeScreenCardClick: (Film) -> Unit,
+) {
+    Row {
+        HomeScreenColumn(
+            onHomeScreenCardClick = onHomeScreenCardClick,
+            allFilms = allFilms,
+            modifier = Modifier.weight(1f)
+        )
+        DetailScreen(
+            film = currentFilm,
+            onBackPressed = { },
+            modifier = Modifier.weight(1f)) // TODO стрелку назад пофиксить и раскидать на нужные экраны
+    }
+}
+
+@Preview
+@Composable
+fun FilmListAndDetailScreenPreview() {
+    val viewModel: FilmViewModel = viewModel()
+    val homeUiState = viewModel.uiState.collectAsState().value
+    FilmListAndDetailScreen(
+        homeUiState.allFilms,
+        homeUiState.currentSelectedFilm,
+        onHomeScreenCardClick = {viewModel.updateDetailsScreenStates(it)}
     )
 }
 

@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.film2gethersimple.R
 import com.example.film2gethersimple.data.Film
+import com.example.film2gethersimple.ui.utils.ContentType
 
 
 //Home screen have column with all films
@@ -43,21 +44,31 @@ fun HomeFilmScreen(
     uiState: FilmUiState,
     onHomeScreenCardClick: (Film) -> Unit,
     onDetailsBackScreenPressed: () -> Unit,
+    contentType: ContentType,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
-    //Moving to detail screen
-    if (uiState.isShowingHomePage) {
-        HomeScreenColumn(
+    if (contentType == ContentType.ListAndDetails) {
+        FilmListAndDetailScreen(
             allFilms = uiState.allFilms,
-            onHomeScreenCardClick = onHomeScreenCardClick,
-            contentPadding = contentPadding
+            currentFilm = uiState.currentSelectedFilm,
+            onHomeScreenCardClick = onHomeScreenCardClick
         )
-    } else {
-        DetailScreen(
-            film = uiState.currentSelectedFilm,
-            onBackPressed = onDetailsBackScreenPressed
-        )
+    }
+    else {
+        //Moving to detail screen
+        if (uiState.isShowingHomePage) {
+            HomeScreenColumn(
+                allFilms = uiState.allFilms,
+                onHomeScreenCardClick = onHomeScreenCardClick,
+                contentPadding = contentPadding
+            )
+        } else {
+            DetailScreen(
+                film = uiState.currentSelectedFilm,
+                onBackPressed = onDetailsBackScreenPressed
+            )
+        }
     }
 
 }
@@ -68,7 +79,8 @@ fun HomeFilmScreen(
 fun HomeScreenColumn(
     onHomeScreenCardClick: (Film) -> Unit,
     allFilms: List<Film>,
-    contentPadding: PaddingValues
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
     LazyColumn(
         content = {
@@ -88,7 +100,7 @@ fun HomeScreenColumn(
         ), //contentPadding
 
         verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier.background(MaterialTheme.colorScheme.background)
+        modifier = modifier.background(MaterialTheme.colorScheme.background)
     )
 }
 
@@ -148,14 +160,15 @@ fun FilmCard(
 }
 
 
-@Preview
+@Preview(widthDp = 1000)
 @Composable
 fun HomeFilmScreenPreview() {
     val viewModel: FilmViewModel = viewModel()
     val homeUiState = viewModel.uiState.collectAsState().value
     HomeFilmScreen(uiState = homeUiState,
         onDetailsBackScreenPressed = {},
-        onHomeScreenCardClick = {})
+        onHomeScreenCardClick = {},
+        contentType = ContentType.ListAndDetails)
 }
 
 
