@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -50,7 +51,11 @@ fun DetailScreen(
     //Information about film
     Column(
         modifier = modifier
-            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+            .padding(
+                start = dimensionResource(id = R.dimen.large),
+                end = dimensionResource(id = R.dimen.large),
+                bottom = dimensionResource(id = R.dimen.large)
+            )
             .background(MaterialTheme.colorScheme.background)
     ) {
         //Row with name and rating of film
@@ -76,7 +81,7 @@ fun NameAndRateRow(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = modifier
-            .padding(bottom = 16.dp)
+            .padding(bottom = dimensionResource(id = R.dimen.large))
             .fillMaxWidth()
     ) {
         Text(
@@ -88,7 +93,7 @@ fun NameAndRateRow(
         )
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(start = 8.dp)
+            modifier = Modifier.padding(start = dimensionResource(id = R.dimen.medium))
         ) {
             Icon(Icons.Outlined.Star, contentDescription = stringResource(R.string.star))
             Column(
@@ -114,7 +119,7 @@ fun FilmDescription(
     Text(
         text = stringResource(id = film.description),
         style = MaterialTheme.typography.bodyLarge,
-        modifier = modifier.padding(bottom = 16.dp),
+        modifier = modifier.padding(bottom = dimensionResource(id = R.dimen.large)),
         color = MaterialTheme.colorScheme.onPrimaryContainer
     )
 }
@@ -124,10 +129,12 @@ fun GenresGrid(
     film: Film, modifier: Modifier = Modifier
 ) {
     LazyVerticalStaggeredGrid(modifier = modifier.fillMaxWidth(1f),
-        verticalItemSpacing = 4.dp,
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalItemSpacing = dimensionResource(id = R.dimen.small),
+        horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.large)),
         //columns = StaggeredGridCells.Fixed(3),
-        columns = StaggeredGridCells.Adaptive(minSize = 150.dp),
+        columns = StaggeredGridCells.Adaptive(
+            minSize = dimensionResource(id = R.dimen.genre_grid_min_size)
+        ),
         content = {
             items(film.genres.toList()) { genre ->
                 GenreChip(genre = genre)
@@ -141,14 +148,18 @@ fun GenreChip(
     genre: Genres,
     modifier: Modifier = Modifier,
 ) {
-    Chip(modifier = modifier, onClick = {}, content = {
-        Text(
-            text = genre.name, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth()
+    Chip(modifier = modifier,
+        onClick = {},
+        content = {
+            Text(
+                text = genre.name, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth()
+            )
+        },
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.medium)),
+        colors = ChipDefaults.chipColors(
+            backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
         )
-    }, shape = RoundedCornerShape(8.dp), colors = ChipDefaults.chipColors(
-        backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
-        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-    )
     )
 }
 
@@ -162,8 +173,8 @@ fun FilmPoster(
         contentScale = ContentScale.Crop,
         modifier = modifier
             .fillMaxSize()
-            .padding(top = 16.dp)
-            .clip(RoundedCornerShape(16.dp))/*                .blur(
+            .padding(top = dimensionResource(id = R.dimen.large))
+            .clip(RoundedCornerShape(dimensionResource(id = R.dimen.large)))/*                .blur(
                                 radiusX = 20.dp,
                                 radiusY = 20.dp,
                                 edgeTreatment = BlurredEdgeTreatment(RoundedCornerShape(8.dp))

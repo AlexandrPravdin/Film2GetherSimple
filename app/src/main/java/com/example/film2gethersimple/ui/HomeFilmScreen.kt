@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -95,11 +96,11 @@ fun HomeScreenColumn(
         },
         horizontalAlignment = Alignment.CenterHorizontally,
         contentPadding = PaddingValues(
-            horizontal = 16.dp,
+            horizontal = dimensionResource(id = R.dimen.large),
             contentPadding.calculateTopPadding()
         ), //contentPadding
 
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.large)),
         modifier = modifier.background(MaterialTheme.colorScheme.background)
     )
 }
@@ -118,24 +119,24 @@ fun FilmCard(
     Card(
         modifier = Modifier
             .fillMaxWidth(),
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.medium)),
         onClick = onCardClick,
-        elevation = CardDefaults.cardElevation(4.dp),
+        elevation = CardDefaults.cardElevation(dimensionResource(id = R.dimen.small)),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
         ),
     ) {
-        Row(modifier = Modifier.padding(8.dp))
+        Row(modifier = Modifier.padding(dimensionResource(id = R.dimen.medium)))
         {
             Image(
                 painter = painterResource(id = image),
                 contentDescription = stringResource(id = name),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(100.dp)
-                    .clip(RoundedCornerShape(8.dp))
+                    .size(dimensionResource(id = R.dimen.film_card_image_size))
+                    .clip(RoundedCornerShape(dimensionResource(id = R.dimen.medium)))
             )
-            Column(modifier = Modifier.padding(start = 16.dp)) {
+            Column(modifier = Modifier.padding(start = dimensionResource(id = R.dimen.large))) {
                 Text(
                     text = stringResource(id = name),
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -150,7 +151,8 @@ fun FilmCard(
                         text = iMDbRate.toString(),
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                         style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.padding(top = 4.dp, start = 4.dp)
+                        modifier = Modifier.padding(top = dimensionResource(id = R.dimen.small),
+                            start = dimensionResource(id = R.dimen.small))
                     )
                 }
             }

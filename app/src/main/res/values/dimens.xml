@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="small">4dp</dimen>
+    <dimen name="medium">8dp</dimen>
+    <dimen name="large">16dp</dimen>
+
+    <dimen name="genre_grid_min_size">150dp</dimen>
+    <dimen name="bottom_app_bar_size">60dp</dimen>
+    <dimen name="permanent_drawer_width">200dp</dimen>
+    <dimen name="film_card_image_size">100dp</dimen>
+</resources>

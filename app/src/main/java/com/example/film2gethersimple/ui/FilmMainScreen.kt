@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -204,7 +205,9 @@ fun BottomFilmAppBar(
     screens: List<BottomNavigationScreens>,
     modifier: Modifier = Modifier
 ) {
-    BottomAppBar(modifier = modifier.height(60.dp)) {
+    BottomAppBar(
+        modifier = modifier.height(dimensionResource(id = R.dimen.bottom_app_bar_size))
+    ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
         screens.forEach { screen ->
@@ -244,7 +247,7 @@ fun FilmNavigationRail(
         val currentDestination = navBackStackEntry?.destination
         screens.forEach { screen ->
             NavigationRailItem(
-                modifier = Modifier.padding(bottom = 8.dp),
+                modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.medium)),
                 selected = currentDestination?.hierarchy?.any { it.route == screen.name } == true,
                 onClick = {
                     navController.navigate(screen.name) {
@@ -283,7 +286,7 @@ fun FilmPermanentDrawer(
         drawerContent = {
             PermanentDrawerSheet(
                 Modifier
-                    .width(200.dp)
+                    .width(dimensionResource(id = R.dimen.permanent_drawer_width))
                     .padding(contentPadding)
             ) {
                 screens.forEach { screen ->
@@ -316,12 +319,12 @@ fun ScreensPermanentDrawerItem(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     NavigationDrawerItem(
-        modifier = modifier.padding(8.dp),
+        modifier = modifier.padding(dimensionResource(id = R.dimen.medium)),
         label = {
             Row {
                 Icon(
                     screen.icon, contentDescription = screen.name,
-                    modifier = Modifier.padding(horizontal = 8.dp)
+                    modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.medium))
                 )
                 Text(text = stringResource(id = screen.title))
             }
@@ -356,7 +359,8 @@ fun FilmListAndDetailScreen(
         DetailScreen(
             film = currentFilm,
             onBackPressed = { },
-            modifier = Modifier.weight(1f)) // TODO стрелку назад пофиксить и раскидать на нужные экраны
+            modifier = Modifier.weight(1f)
+        )
     }
 }
 
@@ -368,7 +372,7 @@ fun FilmListAndDetailScreenPreview() {
     FilmListAndDetailScreen(
         homeUiState.allFilms,
         homeUiState.currentSelectedFilm,
-        onHomeScreenCardClick = {viewModel.updateDetailsScreenStates(it)}
+        onHomeScreenCardClick = { viewModel.updateDetailsScreenStates(it) }
     )
 }
 
