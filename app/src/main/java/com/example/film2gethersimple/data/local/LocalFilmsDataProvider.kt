@@ -1,7 +1,7 @@
 package com.example.film2gethersimple.data.local
 
 import com.example.film2gethersimple.R
-import com.example.film2gethersimple.data.Film
+import com.example.film2gethersimple.ui.models.Film
 import com.example.film2gethersimple.data.Genres
 
 object LocalFilmsDataProvider {

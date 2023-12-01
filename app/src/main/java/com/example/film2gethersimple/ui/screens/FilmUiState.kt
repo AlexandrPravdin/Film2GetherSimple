@@ -1,7 +1,7 @@
-package com.example.film2gethersimple.ui
+package com.example.film2gethersimple.ui.screens
 
-import com.example.film2gethersimple.data.Account
-import com.example.film2gethersimple.data.Film
+import com.example.film2gethersimple.ui.models.Account
+import com.example.film2gethersimple.ui.models.Film
 import com.example.film2gethersimple.data.local.LocalAccountDataProvider.default
 import com.example.film2gethersimple.data.local.LocalFilmsDataProvider.defaultFilm
 

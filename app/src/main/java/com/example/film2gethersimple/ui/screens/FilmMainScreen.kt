@@ -1,4 +1,4 @@
-package com.example.film2gethersimple.ui
+package com.example.film2gethersimple.ui.screens
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.PaddingValues
@@ -38,7 +38,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.film2gethersimple.R
 import com.example.film2gethersimple.data.BottomNavigationScreens
-import com.example.film2gethersimple.data.Film
+import com.example.film2gethersimple.ui.models.Film
 import com.example.film2gethersimple.ui.utils.ContentType
 import com.example.film2gethersimple.ui.utils.NavigationType
 
@@ -50,7 +50,6 @@ fun FilmMainScreen(
     navigationType: NavigationType,
     contentType: ContentType,
     onBackButtonClicked: () -> Unit,
-    goingHomeFunction: () -> Unit,
     onHomeScreenCardClick: (Film) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -109,7 +108,7 @@ fun FilmMainScreen(
                     uiState = uiState,
                     contentPadding = innerPadding,
                     onHomeScreenCardClick = onHomeScreenCardClick,
-                    goingHomeFunction = goingHomeFunction,
+                    goingHomeFunction = onBackButtonClicked,
                     contentType = contentType
                 )
             }
@@ -119,7 +118,7 @@ fun FilmMainScreen(
                 screens = screens,
                 contentPadding = innerPadding,
                 uiState = uiState,
-                goingHomeFunction = goingHomeFunction,
+                goingHomeFunction = onBackButtonClicked,
                 onHomeScreenCardClick = onHomeScreenCardClick,
                 contentType = contentType,
             )
@@ -128,13 +127,11 @@ fun FilmMainScreen(
                 navController = navController,
                 uiState = uiState,
                 contentPadding = innerPadding,
-                goingHomeFunction = goingHomeFunction,
+                goingHomeFunction = onBackButtonClicked,
                 onHomeScreenCardClick = onHomeScreenCardClick,
                 contentType = contentType
-
             )
         }
-
     }
 }
 
@@ -185,7 +182,8 @@ fun TopFilmAppBar(
         title = {
             Text(text = stringResource(id = title))
         },
-        navigationIcon = if (isShowingBackButton) {
+        navigationIcon =
+        if (isShowingBackButton) {
             {
                 IconButton(
                     onClick = onBackButtonClicked

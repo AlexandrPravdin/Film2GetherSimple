@@ -1,4 +1,4 @@
-package com.example.film2gethersimple.ui
+package com.example.film2gethersimple.ui.screens
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -35,7 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.film2gethersimple.R
-import com.example.film2gethersimple.data.Film
+import com.example.film2gethersimple.ui.models.Film
 import com.example.film2gethersimple.ui.utils.ContentType
 
 

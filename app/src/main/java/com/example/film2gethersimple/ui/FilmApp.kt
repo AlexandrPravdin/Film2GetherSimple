@@ -6,6 +6,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
+import com.example.film2gethersimple.ui.screens.FilmMainScreen
+import com.example.film2gethersimple.ui.screens.FilmViewModel
 import com.example.film2gethersimple.ui.utils.ContentType
 import com.example.film2gethersimple.ui.utils.NavigationType
 
@@ -56,7 +58,6 @@ fun FilmApp(
         navigationType = navigationType,
         contentType = contentType,
         modifier = modifier,
-        goingHomeFunction = { viewModel.goingToAccountPage() },
         onBackButtonClicked = { viewModel.goingToHomePage() },
         onHomeScreenCardClick = { viewModel.updateDetailsScreenStates(it) },
     )

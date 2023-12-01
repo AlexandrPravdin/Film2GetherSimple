@@ -1,7 +1,7 @@
 package com.example.film2gethersimple.data.local
 
 import com.example.film2gethersimple.R
-import com.example.film2gethersimple.data.Account
+import com.example.film2gethersimple.ui.models.Account
 
 object LocalAccountDataProvider {
 

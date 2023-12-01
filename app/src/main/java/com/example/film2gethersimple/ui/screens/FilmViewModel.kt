@@ -1,8 +1,8 @@
-package com.example.film2gethersimple.ui
+package com.example.film2gethersimple.ui.screens
 
 import androidx.lifecycle.ViewModel
 import com.example.film2gethersimple.R
-import com.example.film2gethersimple.data.Film
+import com.example.film2gethersimple.ui.models.Film
 import com.example.film2gethersimple.data.local.LocalAccountDataProvider.account
 import com.example.film2gethersimple.data.local.LocalFilmsDataProvider.allFilms
 import kotlinx.coroutines.flow.MutableStateFlow

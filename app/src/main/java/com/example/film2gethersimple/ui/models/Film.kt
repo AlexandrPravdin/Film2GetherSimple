@@ -1,7 +1,8 @@
-package com.example.film2gethersimple.data
+package com.example.film2gethersimple.ui.models
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import com.example.film2gethersimple.data.Genres
 
 data class Film(
     @StringRes val name: Int = -1,

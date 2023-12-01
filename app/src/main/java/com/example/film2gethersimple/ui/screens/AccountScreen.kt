@@ -1,4 +1,4 @@
-package com.example.film2gethersimple.ui
+package com.example.film2gethersimple.ui.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -23,7 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.film2gethersimple.R
-import com.example.film2gethersimple.data.Account
+import com.example.film2gethersimple.ui.models.Account
 
 @Composable
 fun AccountScreen(

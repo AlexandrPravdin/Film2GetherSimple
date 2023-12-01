@@ -1,4 +1,4 @@
-package com.example.film2gethersimple.ui
+package com.example.film2gethersimple.ui.screens
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
@@ -32,9 +34,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.example.film2gethersimple.R
-import com.example.film2gethersimple.data.Film
+import com.example.film2gethersimple.ui.models.Film
 import com.example.film2gethersimple.data.Genres
 
 
@@ -49,7 +50,27 @@ fun DetailScreen(
         onBackPressed()
     }
     //Information about film
-    Column(
+    /*    Column(
+            modifier = modifier
+                .padding(
+                    start = dimensionResource(id = R.dimen.large),
+                    end = dimensionResource(id = R.dimen.large),
+                    bottom = dimensionResource(id = R.dimen.large)
+                )
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+            //Row with name and rating of film
+            NameAndRateRow(
+                filmName = film.name, filmRate = film.iMDbRate, modifier = Modifier.fillMaxWidth()
+            )
+            //Film description text
+            FilmDescription(film = film)
+
+            //      LazyHorizontalStaggeredGrid with film genres
+            GenresGrid(film = film)
+            FilmPoster(film = film)
+        }*/
+    LazyColumn(
         modifier = modifier
             .padding(
                 start = dimensionResource(id = R.dimen.large),
@@ -58,16 +79,24 @@ fun DetailScreen(
             )
             .background(MaterialTheme.colorScheme.background)
     ) {
-        //Row with name and rating of film
-        NameAndRateRow(
-            filmName = film.name, filmRate = film.iMDbRate, modifier = Modifier.fillMaxWidth()
-        )
-        //Film description text
-        FilmDescription(film = film)
+        item {
+            //Row with name and rating of film
+            NameAndRateRow(
+                filmName = film.name, filmRate = film.iMDbRate, modifier = Modifier.fillMaxWidth()
+            )
 
-//      LazyHorizontalStaggeredGrid with film genres
-        GenresGrid(film = film)
-        FilmPoster(film = film)
+
+            //Film description text
+            FilmDescription(film = film)
+
+
+            //LazyHorizontalStaggeredGrid with film genres
+            GenresGrid(film = film)
+
+
+
+            FilmPoster(film = film)
+        }
     }
 }
 
@@ -128,12 +157,15 @@ fun FilmDescription(
 fun GenresGrid(
     film: Film, modifier: Modifier = Modifier
 ) {
-    LazyVerticalStaggeredGrid(modifier = modifier.fillMaxWidth(1f),
+    LazyVerticalStaggeredGrid(
+        modifier = modifier
+            .fillMaxWidth(1f)
+            .sizeIn(maxHeight = dimensionResource(id = R.dimen.genre_item_min_size)), //Maybe right
         verticalItemSpacing = dimensionResource(id = R.dimen.small),
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.large)),
         //columns = StaggeredGridCells.Fixed(3),
         columns = StaggeredGridCells.Adaptive(
-            minSize = dimensionResource(id = R.dimen.genre_grid_min_size)
+            minSize = dimensionResource(id = R.dimen.min_genre_grid_size)
         ),
         content = {
             items(film.genres.toList()) { genre ->
@@ -148,7 +180,8 @@ fun GenreChip(
     genre: Genres,
     modifier: Modifier = Modifier,
 ) {
-    Chip(modifier = modifier,
+    Chip(
+        modifier = modifier,
         onClick = {},
         content = {
             Text(

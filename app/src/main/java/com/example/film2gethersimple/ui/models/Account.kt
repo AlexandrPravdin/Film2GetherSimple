@@ -1,4 +1,4 @@
-package com.example.film2gethersimple.data
+package com.example.film2gethersimple.ui.models
 
 //Data class with information about user
 data class Account(
