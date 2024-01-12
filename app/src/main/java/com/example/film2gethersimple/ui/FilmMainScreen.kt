@@ -1,4 +1,4 @@
-package com.example.film2gethersimple.ui.screens
+package com.example.film2gethersimple.ui.home
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.PaddingValues
@@ -33,14 +33,15 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.film2gethersimple.R
-import com.example.film2gethersimple.data.BottomNavigationScreens
+import com.example.film2gethersimple.data.NavigationScreens
+import com.example.film2gethersimple.data.Genres
+import com.example.film2gethersimple.ui.detailscreen.DetailScreen
 import com.example.film2gethersimple.ui.models.Film
 import com.example.film2gethersimple.ui.utils.ContentType
 import com.example.film2gethersimple.ui.utils.NavigationType
+import com.example.film2gethersimple.ui.navigation.AppNavHost
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,13 +56,13 @@ fun FilmMainScreen(
 ) {
     //Current screen
     val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentScreen = BottomNavigationScreens.valueOf(
-        backStackEntry?.destination?.route ?: BottomNavigationScreens.HomeScreen.name
+    val currentScreen = NavigationScreens.valueOf(
+        backStackEntry?.destination?.route ?: NavigationScreens.HomeScreen.name
     )
     //All screens
     val screens = listOf(
-        BottomNavigationScreens.HomeScreen,
-        BottomNavigationScreens.AccountScreen,
+        NavigationScreens.HomeScreen,
+        NavigationScreens.AccountScreen,
     )
     Scaffold(
         modifier = modifier,
@@ -69,25 +70,35 @@ fun FilmMainScreen(
             //Top app bar have the another functional, forEach screen the forEach function
             when (currentScreen) {
                 //Top app bar for Home Screen
-                BottomNavigationScreens.HomeScreen -> {
+                NavigationScreens.HomeScreen -> {
                     TopFilmAppBar(
-                        title = uiState.topAppBarTitle,
-                        isShowingBackButton = !uiState.isShowingHomePage && contentType != ContentType.ListAndDetails,
-                        onBackButtonClicked = onBackButtonClicked //On button clicked should to refactor
+                        title = R.string.account_screen,
+                        isShowingBackButton = false,
+                        onBackButtonClicked = {} //On button clicked should to refactor
                     )
                 }
                 //Top app bar for AccountScreen
-                BottomNavigationScreens.AccountScreen -> {
+                NavigationScreens.AccountScreen -> {
                     TopFilmAppBar(title = R.string.account_screen,
                         isShowingBackButton = false,
                         onBackButtonClicked = {})
+                }
+                //Top app bar DetailsScreen
+                NavigationScreens.DetailsScreen -> {
+                    TopFilmAppBar(
+                        title = uiState.currentSelectedFilm.name,
+                        isShowingBackButton = true,
+                        onBackButtonClicked = {
+                            navController.popBackStack()
+                        },
+                    )
                 }
             }
         },
 
         bottomBar = {
             //Bottom bar showing only when Navigation Type is BOTTOM_NAVIGATION
-            if (navigationType == NavigationType.BOTTOM_NAVIGATION && uiState.isShowingHomePage) {
+            if (navigationType == NavigationType.BOTTOM_NAVIGATION && currentScreen != NavigationScreens.DetailsScreen) {
                 BottomFilmAppBar(
                     navController = navController,
                     screens = screens,
@@ -96,7 +107,7 @@ fun FilmMainScreen(
         },
     ) { innerPadding ->
         //Row for rail and exp
-        if (navigationType == NavigationType.NAVIGATION_RAIL && uiState.isShowingHomePage) {
+        if (navigationType == NavigationType.NAVIGATION_RAIL && currentScreen != NavigationScreens.DetailsScreen) {
             Row {
                 FilmNavigationRail(
                     navController = navController,
@@ -135,39 +146,6 @@ fun FilmMainScreen(
     }
 }
 
-@Composable
-fun AppNavHost(
-    navController: NavHostController,
-    uiState: FilmUiState,
-    onHomeScreenCardClick: (Film) -> Unit,
-    goingHomeFunction: () -> Unit,
-    contentType: ContentType,
-    modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(0.dp),
-) {
-    NavHost(
-        navController = navController,
-        startDestination = BottomNavigationScreens.HomeScreen.name,
-        modifier = modifier.padding(contentPadding),
-    ) {
-        composable(BottomNavigationScreens.HomeScreen.name) {
-            HomeFilmScreen(
-                uiState = uiState,
-                onHomeScreenCardClick = { film: Film ->
-                    onHomeScreenCardClick(film)
-                },
-                onDetailsBackScreenPressed = goingHomeFunction,
-                contentType = contentType
-            )
-        }
-        composable(BottomNavigationScreens.AccountScreen.name) {
-            AccountScreen(
-                account = uiState.account
-            )
-        }
-    }
-}
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -200,7 +178,7 @@ fun TopFilmAppBar(
 @Composable
 fun BottomFilmAppBar(
     navController: NavHostController,
-    screens: List<BottomNavigationScreens>,
+    screens: List<NavigationScreens>,
     modifier: Modifier = Modifier
 ) {
     BottomAppBar(
@@ -222,7 +200,7 @@ fun BottomFilmAppBar(
                 },
                 icon = {
                     Icon(
-                        screen.icon,
+                        screen.icon!!,
                         contentDescription = null,
                     )
                 },
@@ -236,7 +214,7 @@ fun BottomFilmAppBar(
 fun FilmNavigationRail(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    screens: List<BottomNavigationScreens>,
+    screens: List<NavigationScreens>,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 
     ) {
@@ -258,7 +236,7 @@ fun FilmNavigationRail(
                 },
                 icon = {
                     Icon(
-                        screen.icon,
+                        screen.icon!!,
                         contentDescription = null,
                     )
                 },
@@ -271,7 +249,7 @@ fun FilmNavigationRail(
 @Composable
 fun FilmPermanentDrawer(
     navController: NavHostController,
-    screens: List<BottomNavigationScreens>,
+    screens: List<NavigationScreens>,
     uiState: FilmUiState,
     goingHomeFunction: () -> Unit,
     onHomeScreenCardClick: (Film) -> Unit,
@@ -310,7 +288,7 @@ fun FilmPermanentDrawer(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScreensPermanentDrawerItem(
-    screen: BottomNavigationScreens,
+    screen: NavigationScreens,
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
@@ -321,7 +299,7 @@ fun ScreensPermanentDrawerItem(
         label = {
             Row {
                 Icon(
-                    screen.icon, contentDescription = screen.name,
+                    screen.icon!!, contentDescription = screen.name,
                     modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.medium))
                 )
                 Text(text = stringResource(id = screen.title))
@@ -371,6 +349,37 @@ fun FilmListAndDetailScreenPreview() {
         homeUiState.allFilms,
         homeUiState.currentSelectedFilm,
         onHomeScreenCardClick = { viewModel.updateDetailsScreenStates(it) }
+    )
+}
+
+@Preview
+@Composable
+fun FilmList() {
+    HomeScreenColumn(
+        onHomeScreenCardClick = {},
+        allFilms = listOf<Film>(
+            Film(
+                name = R.string.the_shawshank_redemption,
+                image = R.drawable.shawshank_image2,
+                description = R.string.the_shawshank_redemption_description,
+                genres = setOf(Genres.Drama),
+                iMDbRate = 9.2,
+            ),
+            Film(
+                name = R.string.the_godfather,
+                image = R.drawable.godfather_image,
+                description = (R.string.the_godfather_description),
+                genres = setOf(Genres.Drama),
+                iMDbRate = 9.2,
+            ),
+            Film(
+                name = R.string.the_dark_knight,
+                image = R.drawable.the_dark_knight_image,
+                description = (R.string.the_dark_knight_description),
+                genres = setOf(Genres.Drama, Genres.Crime),
+                iMDbRate = 9.0,
+            )
+        )
     )
 }
 
