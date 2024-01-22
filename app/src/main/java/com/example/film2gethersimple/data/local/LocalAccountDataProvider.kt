@@ -9,15 +9,9 @@ object LocalAccountDataProvider {
     val account: Account = Account(
         firstName = "Alexandr",
         secondName = "Pravdin",
-        image = R.drawable.account_image,
+        image = R.drawable.ic_launcher_foreground,
         mail = "alex.pravdinn@gmail.com"
     )
 
     //Default account for uiState initialization
-    val default: Account = Account(
-        firstName = "",
-        secondName = "",
-        image = -1,
-        mail = ""
-    )
 }

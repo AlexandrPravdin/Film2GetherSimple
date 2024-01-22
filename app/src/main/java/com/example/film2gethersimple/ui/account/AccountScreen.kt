@@ -1,4 +1,4 @@
-package com.example.film2gethersimple.ui.screens
+package com.example.film2gethersimple.ui.account
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -74,6 +74,7 @@ fun AccountName(
     )
 }
 
+
 @Preview(showBackground = true)
 @Composable
 fun AccountScreenPreview() {
@@ -81,7 +82,7 @@ fun AccountScreenPreview() {
         account = Account(
             firstName = "Alexandr",
             secondName = "Pravdin",
-            image = R.drawable.godfather_2_image,
+            image = R.drawable.ic_launcher_foreground,
             mail = "Alex.pravdinn@gmail.com".lowercase()
         )
     )

@@ -1,10 +1,8 @@
-package com.example.film2gethersimple.ui.screens
+package com.example.film2gethersimple.ui.mainscreen.detailscreen
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,7 +17,7 @@ import androidx.compose.material.Chip
 import androidx.compose.material.ChipDefaults
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -28,15 +26,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.film2gethersimple.R
 import com.example.film2gethersimple.ui.models.Film
-import com.example.film2gethersimple.data.Genres
 
 
 //DetailsScreen where user see film information
@@ -49,27 +47,6 @@ fun DetailScreen(
     BackHandler {
         onBackPressed()
     }
-    //Information about film
-    /*    Column(
-            modifier = modifier
-                .padding(
-                    start = dimensionResource(id = R.dimen.large),
-                    end = dimensionResource(id = R.dimen.large),
-                    bottom = dimensionResource(id = R.dimen.large)
-                )
-                .background(MaterialTheme.colorScheme.background)
-        ) {
-            //Row with name and rating of film
-            NameAndRateRow(
-                filmName = film.name, filmRate = film.iMDbRate, modifier = Modifier.fillMaxWidth()
-            )
-            //Film description text
-            FilmDescription(film = film)
-
-            //      LazyHorizontalStaggeredGrid with film genres
-            GenresGrid(film = film)
-            FilmPoster(film = film)
-        }*/
     LazyColumn(
         modifier = modifier
             .padding(
@@ -82,19 +59,13 @@ fun DetailScreen(
         item {
             //Row with name and rating of film
             NameAndRateRow(
-                filmName = film.name, filmRate = film.iMDbRate, modifier = Modifier.fillMaxWidth()
+                filmName = film.name,
+                filmRate = film.publisherDate,
+                modifier = Modifier.fillMaxWidth()
             )
-
-
             //Film description text
-            FilmDescription(film = film)
-
-
-            //LazyHorizontalStaggeredGrid with film genres
-            GenresGrid(film = film)
-
-
-
+            FilmDescription(film.description)
+            GenresGrid(film.categories)
             FilmPoster(film = film)
         }
     }
@@ -102,8 +73,8 @@ fun DetailScreen(
 
 @Composable
 fun NameAndRateRow(
-    filmName: Int,
-    filmRate: Double,
+    filmName: String,
+    filmRate: String,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -114,7 +85,7 @@ fun NameAndRateRow(
             .fillMaxWidth()
     ) {
         Text(
-            text = stringResource(id = filmName),
+            text = filmName,
             color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.Bold,
@@ -124,38 +95,34 @@ fun NameAndRateRow(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(start = dimensionResource(id = R.dimen.medium))
         ) {
-            Icon(Icons.Outlined.Star, contentDescription = stringResource(R.string.star))
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Text(
-                    text = filmRate.toString(),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                )
-                Text(
-                    text = "iMDb",
-                )
-            }
+            Icon(Icons.Outlined.DateRange, contentDescription = Icons.Outlined.DateRange.name)
         }
+        Text(
+            text = filmRate,
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold,
+        )
     }
 }
 
 @Composable
 fun FilmDescription(
-    film: Film, modifier: Modifier = Modifier
+    filmDescription: String?,
+    modifier: Modifier = Modifier
 ) {
-    Text(
-        text = stringResource(id = film.description),
-        style = MaterialTheme.typography.bodyLarge,
-        modifier = modifier.padding(bottom = dimensionResource(id = R.dimen.large)),
-        color = MaterialTheme.colorScheme.onPrimaryContainer
-    )
+    if (filmDescription != null) {
+        Text(
+            text = filmDescription,
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = modifier.padding(bottom = dimensionResource(id = R.dimen.large)),
+            color = MaterialTheme.colorScheme.onPrimaryContainer
+        )
+    }
 }
 
 @Composable
 fun GenresGrid(
-    film: Film, modifier: Modifier = Modifier
+    filmGenres: List<String>, modifier: Modifier = Modifier
 ) {
     LazyVerticalStaggeredGrid(
         modifier = modifier
@@ -163,12 +130,11 @@ fun GenresGrid(
             .sizeIn(maxHeight = dimensionResource(id = R.dimen.genre_item_min_size)), //Maybe right
         verticalItemSpacing = dimensionResource(id = R.dimen.small),
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.large)),
-        //columns = StaggeredGridCells.Fixed(3),
         columns = StaggeredGridCells.Adaptive(
             minSize = dimensionResource(id = R.dimen.min_genre_grid_size)
         ),
         content = {
-            items(film.genres.toList()) { genre ->
+            items(filmGenres) { genre ->
                 GenreChip(genre = genre)
             }
         })
@@ -177,7 +143,7 @@ fun GenresGrid(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun GenreChip(
-    genre: Genres,
+    genre: String,
     modifier: Modifier = Modifier,
 ) {
     Chip(
@@ -185,7 +151,7 @@ fun GenreChip(
         onClick = {},
         content = {
             Text(
-                text = genre.name, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth()
+                text = genre, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth()
             )
         },
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.medium)),
@@ -200,22 +166,18 @@ fun GenreChip(
 fun FilmPoster(
     film: Film, modifier: Modifier = Modifier
 ) {
-    Image(
-        painter = painterResource(id = film.image),
-        contentDescription = stringResource(id = film.name),
+    AsyncImage(
+        model = ImageRequest.Builder(context = LocalContext.current)
+            .data(film.imageLink)
+            .crossfade(true)
+            .build(),
+        contentDescription = film.name,
         contentScale = ContentScale.Crop,
         modifier = modifier
             .fillMaxSize()
             .padding(top = dimensionResource(id = R.dimen.large))
-            .clip(RoundedCornerShape(dimensionResource(id = R.dimen.large)))/*                .blur(
-                                radiusX = 20.dp,
-                                radiusY = 20.dp,
-                                edgeTreatment = BlurredEdgeTreatment(RoundedCornerShape(8.dp))
-                            )
-                            .padding(16.dp),*//*colorFilter = ColorFilter.tint(
-                MaterialTheme.colorScheme.primaryContainer,
-                blendMode = BlendMode.Darken
-            ),*/
+            .clip(RoundedCornerShape(dimensionResource(id = R.dimen.large)))
+
     )
 }
 
@@ -223,13 +185,15 @@ fun FilmPoster(
 @Composable
 fun NameAndRateRowPreview() {
     val film = Film(
-        name = R.string.the_shawshank_redemption,
-        image = R.drawable.shawshank_image,
-        description = R.string.the_shawshank_redemption_description,
-        genres = setOf(Genres.Drama),
-        iMDbRate = 9.2,
+        name = "the Shawshank",
+        imageLink = "http://books.google.com/books/content?id=iTsfAQAAMAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        description = "Film descr",
+        categories = listOf(
+            "Drama", "Adventure", "Action", "Biography", "Adventure"
+        ),
+        publisherDate = "1982",
     )
-    NameAndRateRow(filmName = film.name, filmRate = film.iMDbRate)
+    NameAndRateRow(filmName = film.name, filmRate = "1981")
 }
 
 
@@ -237,13 +201,13 @@ fun NameAndRateRowPreview() {
 @Composable
 fun FilmDetailPreview() {
     val film = Film(
-        name = R.string.the_shawshank_redemption,
-        image = R.drawable.shawshank_image,
-        description = R.string.the_shawshank_redemption_description,
-        genres = setOf(
-            Genres.Drama, Genres.Adventure, Genres.Action, Genres.Biography, Genres.Adventure
+        name = "the Shawshank",
+        imageLink = "http://books.google.com/books/content?id=iTsfAQAAMAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        description = "Film description",
+        categories = listOf(
+            "Drama", "Adventure", "Action", "Biography", "Adventure"
         ),
-        iMDbRate = 9.2,
+        publisherDate = "1982",
     )
     DetailScreen(
         film = film,
@@ -251,3 +215,4 @@ fun FilmDetailPreview() {
         modifier = Modifier.background(MaterialTheme.colorScheme.background)
     )
 }
+

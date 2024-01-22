@@ -1,26 +1,47 @@
 package com.example.film2gethersimple.ui
 
+import android.os.Build
+import androidx.annotation.RequiresExtension
+import androidx.compose.foundation.layout.Row
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.film2gethersimple.ui.screens.FilmMainScreen
-import com.example.film2gethersimple.ui.screens.FilmViewModel
+import com.example.film2gethersimple.R
+import com.example.film2gethersimple.data.NavigationScreens
+import com.example.film2gethersimple.ui.mainscreen.homescreen.FilmUiState
+import com.example.film2gethersimple.ui.mainscreen.homescreen.FilmViewModel
+import com.example.film2gethersimple.ui.mainscreen.listanddetailsscreen.FilmPermanentDrawer
+import com.example.film2gethersimple.ui.navigation.AppNavHost
+import com.example.film2gethersimple.ui.navigation.BottomFilmAppBar
+import com.example.film2gethersimple.ui.navigation.FilmNavigationRail
 import com.example.film2gethersimple.ui.utils.ContentType
 import com.example.film2gethersimple.ui.utils.NavigationType
 
 
 //App at all
+@RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 @Composable
 fun FilmApp(
     windowSize: WindowWidthSizeClass,
     modifier: Modifier = Modifier,
 ) {
     //viewModel architecture
-    val viewModel: FilmViewModel = viewModel()
-    val homeUiState = viewModel.uiState.collectAsState().value
+    val viewModel: FilmViewModel = viewModel(factory = FilmViewModel.Factory)
+
 
     //navigation logic
     val navController = rememberNavController()
@@ -52,13 +73,138 @@ fun FilmApp(
     }
 
     //Film screen with Home and Details screen
-    FilmMainScreen(
-        uiState = homeUiState,
-        navController = navController,
-        navigationType = navigationType,
-        contentType = contentType,
+    //Current screen
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentScreen = NavigationScreens.valueOf(
+        backStackEntry?.destination?.route ?: NavigationScreens.HomeScreen.name
+    )
+    //All screens
+    val screens = listOf(
+        NavigationScreens.HomeScreen,
+        NavigationScreens.AccountScreen,
+    )
+
+    Scaffold(
         modifier = modifier,
-        onBackButtonClicked = { viewModel.goingToHomePage() },
-        onHomeScreenCardClick = { viewModel.updateDetailsScreenStates(it) },
+        topBar = {
+            //Top app bar have the another functional, forEach screen the forEach function
+            when (currentScreen) {
+                //Top app bar for Home Screen
+                NavigationScreens.HomeScreen -> {
+                    TopFilmAppBar(
+                        title = stringResource(id = R.string.home_screen),
+                        isShowingBackButton = false,
+                        onBackButtonClicked = {} //On button clicked should to refactor
+                    )
+                }
+                //Top app bar for AccountScreen
+                NavigationScreens.AccountScreen -> {
+                    TopFilmAppBar(title = stringResource(R.string.account_screen),
+                        isShowingBackButton = false,
+                        onBackButtonClicked = {}
+                    )
+                }
+                //Top app bar DetailsScreen
+                NavigationScreens.DetailsScreen -> {
+                    TopFilmAppBar(
+                        title = (viewModel.uiState as FilmUiState.Success).currentSelectedItem.name,
+                        isShowingBackButton = true,
+                        onBackButtonClicked = {
+                            navController.popBackStack()
+                        },
+                    )
+                }
+                //Top app bar for ListAndDetailsScreen
+                NavigationScreens.ListAndDetailsScreen -> {
+                    TopFilmAppBar(title = stringResource(R.string.home_screen),
+                        isShowingBackButton = false,
+                        onBackButtonClicked = {}
+                    )
+                }
+            }
+        },
+
+        bottomBar = {
+            //Bottom bar showing only when Navigation Type is BOTTOM_NAVIGATION
+            if (navigationType == NavigationType.BOTTOM_NAVIGATION && currentScreen != NavigationScreens.DetailsScreen) {
+                BottomFilmAppBar(
+                    navController = navController,
+                    screens = screens,
+                )
+            }
+        },
+    ) { innerPadding ->
+        //Row for rail and exp
+        if (navigationType == NavigationType.NAVIGATION_RAIL && currentScreen != NavigationScreens.DetailsScreen) {
+            Row {
+                FilmNavigationRail(
+                    navController = navController,
+                    screens = screens,
+                    contentPadding = innerPadding,
+                )
+                AppNavHost(
+                    navController = navController,
+                    uiState = viewModel.uiState,
+                    contentPadding = innerPadding,
+                    onHomeScreenCardClick = { viewModel.updateDetailsScreenStates(it) },
+                    contentType = contentType,
+                    onRetryButtonClick = { viewModel.initializeUIState() }
+                )
+            }
+        } else if (navigationType == NavigationType.PERMANENT_NAVIGATION_DRAWER) {
+            FilmPermanentDrawer(
+                navController = navController,
+                screens = listOf(
+                    NavigationScreens.ListAndDetailsScreen,
+                    NavigationScreens.AccountScreen
+                ),
+                contentPadding = innerPadding,
+                uiState = viewModel.uiState,
+                onHomeScreenCardClick = { viewModel.updateDetailsScreenStates(it) },
+                contentType = contentType,
+                onRetryButtonClick = { viewModel.initializeUIState() }
+            )
+        } else {
+            AppNavHost(
+                navController = navController,
+                uiState = viewModel.uiState,
+                contentPadding = innerPadding,
+                onHomeScreenCardClick = { viewModel.updateDetailsScreenStates(it) },
+                contentType = contentType,
+                onRetryButtonClick = { viewModel.initializeUIState() }
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopFilmAppBar(
+    title: String,
+    modifier: Modifier = Modifier,
+    isShowingBackButton: Boolean = false,
+    onBackButtonClicked: () -> Unit,
+) {
+    TopAppBar(
+        modifier = modifier,
+        title = {
+            Text(
+                text = title,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
+        },
+        navigationIcon =
+        if (isShowingBackButton) {
+            {
+                IconButton(
+                    onClick = onBackButtonClicked
+                ) {
+                    Icon(Icons.Filled.ArrowBack, contentDescription = "Back Icon")
+                }
+            }
+        } else {
+            {}
+        },
     )
 }

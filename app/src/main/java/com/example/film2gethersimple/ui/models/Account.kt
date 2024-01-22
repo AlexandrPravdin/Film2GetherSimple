@@ -6,5 +6,4 @@ data class Account(
     val secondName: String,
     val image: Int,
     val mail: String,
-//    val registrationDate: Date
 )
