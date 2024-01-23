@@ -9,5 +9,8 @@
     <string name="account_screen">Account</string>
     <string name="details_screen">Details</string>
     <string name="list_and_details_screen">ListAndDetails</string>
+    <string name="loading">Loading...</string>
+    <string name="error">Error</string>
+    <string name="retry">Retry</string>
 
 </resources>

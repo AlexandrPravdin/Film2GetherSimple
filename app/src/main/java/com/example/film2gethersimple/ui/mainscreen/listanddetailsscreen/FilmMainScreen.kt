@@ -23,7 +23,6 @@ import com.example.film2gethersimple.ui.navigation.ScreensPermanentDrawerItem
 import com.example.film2gethersimple.ui.utils.ContentType
 
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilmPermanentDrawer(

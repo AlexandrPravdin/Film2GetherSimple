@@ -33,6 +33,7 @@ sealed interface FilmUiState {
 
         var topAppBarTitle: String = ""
     ) : FilmUiState
+
     object Error : FilmUiState
     object Loading : FilmUiState
 }

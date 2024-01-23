@@ -1,6 +1,7 @@
 package com.example.film2gethersimple.ui
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresExtension
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
@@ -31,6 +32,7 @@ import com.example.film2gethersimple.ui.navigation.FilmNavigationRail
 import com.example.film2gethersimple.ui.utils.ContentType
 import com.example.film2gethersimple.ui.utils.NavigationType
 
+private const val TAG = "FilmApp"
 
 //App at all
 @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
@@ -50,6 +52,7 @@ fun FilmApp(
     //ScreenSize logic
     val navigationType: NavigationType
     val contentType: ContentType
+    Log.i(TAG, "Film App Started Screen is $windowSize")
     when (windowSize) {
         WindowWidthSizeClass.Compact -> {
             navigationType = NavigationType.BOTTOM_NAVIGATION
@@ -135,7 +138,7 @@ fun FilmApp(
         },
     ) { innerPadding ->
         //Row for rail and exp
-        if (navigationType == NavigationType.NAVIGATION_RAIL && currentScreen != NavigationScreens.DetailsScreen) {
+        if (navigationType == NavigationType.NAVIGATION_RAIL/* && currentScreen != NavigationScreens.DetailsScreen*/) {
             Row {
                 FilmNavigationRail(
                     navController = navController,

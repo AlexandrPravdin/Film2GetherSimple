@@ -1,5 +1,6 @@
 package com.example.film2gethersimple
 
+import Film2GetherSimpleTheme
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,7 +12,6 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.ui.Modifier
 import com.example.film2gethersimple.ui.FilmApp
-import com.example.film2gethersimple.ui.theme.Film2GetherSimpleTheme
 
 class MainActivity : ComponentActivity() {
     @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)

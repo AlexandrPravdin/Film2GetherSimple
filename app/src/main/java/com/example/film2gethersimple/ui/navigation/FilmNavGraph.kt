@@ -1,5 +1,6 @@
 package com.example.film2gethersimple.ui.navigation
 
+import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -20,6 +21,8 @@ import com.example.film2gethersimple.ui.mainscreen.listanddetailsscreen.FilmList
 import com.example.film2gethersimple.ui.models.Film
 import com.example.film2gethersimple.ui.utils.ContentType
 
+private const val TAG = "FilmNavHost"
+
 @Composable
 fun AppNavHost(
     navController: NavHostController,
@@ -30,15 +33,22 @@ fun AppNavHost(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
+    Log.i(TAG, "NavHost Started, content type: ${contentType}")
     NavHost(
         navController = navController,
         startDestination =
-        if (contentType == ContentType.ListOnly)
+        if (contentType != ContentType.ListAndDetails) {
+            Log.i(TAG, "I want to start home only")
             NavigationScreens.HomeScreen.name
-        else NavigationScreens.ListAndDetailsScreen.name,
+        } else {
+            Log.i(TAG, "I want to start List and details")
+            NavigationScreens.ListAndDetailsScreen.name
+        },
         modifier = modifier.padding(contentPadding),
     ) {
+
         composable(NavigationScreens.HomeScreen.name) {
+            Log.i(TAG, "HomeScreen Started")
             when (uiState) {
                 is FilmUiState.Success -> {
                     HomeFilmScreen(
@@ -61,7 +71,7 @@ fun AppNavHost(
 
         }
         composable(NavigationScreens.ListAndDetailsScreen.name) {
-
+            Log.i(TAG, "ListAndDetailsScreen Started")
             when (uiState) {
                 is FilmUiState.Success -> {
                     FilmListAndDetailScreen(allFilms = uiState.response,
@@ -81,9 +91,11 @@ fun AppNavHost(
             }
         }
         composable(NavigationScreens.AccountScreen.name) {
+            Log.i(TAG, "AccountScreen Started")
             AccountScreen(account = account)
         }
         composable(NavigationScreens.DetailsScreen.name) {
+            Log.i(TAG, "DetailsScreen Started")
             when (uiState) {
                 is FilmUiState.Success -> {
                     DetailScreen(
