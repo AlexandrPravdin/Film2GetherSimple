@@ -37,13 +37,7 @@ fun AppNavHost(
     NavHost(
         navController = navController,
         startDestination =
-        if (contentType != ContentType.ListAndDetails) {
-            Log.i(TAG, "I want to start home only")
-            NavigationScreens.HomeScreen.name
-        } else {
-            Log.i(TAG, "I want to start List and details")
-            NavigationScreens.ListAndDetailsScreen.name
-        },
+            NavigationScreens.HomeScreen.name,
         modifier = modifier.padding(contentPadding),
     ) {
 
@@ -51,13 +45,30 @@ fun AppNavHost(
             Log.i(TAG, "HomeScreen Started")
             when (uiState) {
                 is FilmUiState.Success -> {
-                    HomeFilmScreen(
+                    if (contentType != ContentType.ListAndDetails) {
+                        Log.i(TAG, "I want to start home only")
+                        HomeFilmScreen(
+                            uiState = uiState,
+                            onHomeScreenCardClick = { film: Film ->
+                                onHomeScreenCardClick(film)
+                                navController.navigate(NavigationScreens.DetailsScreen.name)
+                            },
+                        )
+                    } else {
+                        Log.i(TAG, "I want to start List and details")
+                        FilmListAndDetailScreen(allFilms = uiState.response,
+                            currentFilm = uiState.currentSelectedItem,
+                            onHomeScreenCardClick = { film: Film ->
+                                onHomeScreenCardClick(film)
+                            })
+                    }
+/*                    HomeFilmScreen(
                         uiState = uiState,
                         onHomeScreenCardClick = { film: Film ->
                             onHomeScreenCardClick(film)
                             navController.navigate(NavigationScreens.DetailsScreen.name)
                         },
-                    )
+                    )*/
                 }
 
                 is FilmUiState.Error -> {
@@ -69,26 +80,6 @@ fun AppNavHost(
                 }
             }
 
-        }
-        composable(NavigationScreens.ListAndDetailsScreen.name) {
-            Log.i(TAG, "ListAndDetailsScreen Started")
-            when (uiState) {
-                is FilmUiState.Success -> {
-                    FilmListAndDetailScreen(allFilms = uiState.response,
-                        currentFilm = uiState.currentSelectedItem,
-                        onHomeScreenCardClick = { film: Film ->
-                            onHomeScreenCardClick(film)
-                        })
-                }
-
-                is FilmUiState.Error -> {
-                    ErrorScreen(onRetryButtonClick)
-                }
-
-                is FilmUiState.Loading -> {
-                    LoadingScreen()
-                }
-            }
         }
         composable(NavigationScreens.AccountScreen.name) {
             Log.i(TAG, "AccountScreen Started")

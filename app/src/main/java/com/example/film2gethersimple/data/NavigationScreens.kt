@@ -15,6 +15,6 @@ enum class NavigationScreens(
     HomeScreen(Icons.Filled.Home, R.string.home_screen),
     AccountScreen(Icons.Filled.AccountCircle, R.string.account_screen),
     DetailsScreen(Icons.Filled.List, title = R.string.details_screen),
-    ListAndDetailsScreen(Icons.Filled.Home, R.string.list_and_details_screen)
+    ListAndDetailsScreen(Icons.Filled.Home, title = R.string.list_and_details_screen)
 }
 

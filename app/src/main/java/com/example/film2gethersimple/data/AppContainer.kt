@@ -2,7 +2,7 @@ package com.example.film2gethersimple.data
 
 import android.content.Context
 import com.example.film2gethersimple.data.network.FilmApiService
-import com.example.film2gethersimple.data.network.NetworkFilmRepository
+import com.example.film2gethersimple.data.network.FilmRemoteRepository
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -36,7 +36,7 @@ class AppDataContainer(private val context: Context) : AppContainer {
 
 
     override val filmRepository: FilmRepository by lazy {
-        NetworkFilmRepository(retrofitService)
+        FilmRemoteRepository(retrofitService)
     }
 
 }

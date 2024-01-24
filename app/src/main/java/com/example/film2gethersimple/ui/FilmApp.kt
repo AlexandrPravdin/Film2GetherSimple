@@ -102,7 +102,7 @@ fun FilmApp(
                 }
                 //Top app bar for AccountScreen
                 NavigationScreens.AccountScreen -> {
-                    TopFilmAppBar(title = stringResource(R.string.account_screen),
+                    TopFilmAppBar(title = stringResource(NavigationScreens.AccountScreen.title),
                         isShowingBackButton = false,
                         onBackButtonClicked = {}
                     )
@@ -119,7 +119,7 @@ fun FilmApp(
                 }
                 //Top app bar for ListAndDetailsScreen
                 NavigationScreens.ListAndDetailsScreen -> {
-                    TopFilmAppBar(title = stringResource(R.string.home_screen),
+                    TopFilmAppBar(title = stringResource(NavigationScreens.ListAndDetailsScreen.title),
                         isShowingBackButton = false,
                         onBackButtonClicked = {}
                     )
@@ -158,7 +158,7 @@ fun FilmApp(
             FilmPermanentDrawer(
                 navController = navController,
                 screens = listOf(
-                    NavigationScreens.ListAndDetailsScreen,
+                    NavigationScreens.HomeScreen,
                     NavigationScreens.AccountScreen
                 ),
                 contentPadding = innerPadding,
