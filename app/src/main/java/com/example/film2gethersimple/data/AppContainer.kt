@@ -10,10 +10,10 @@ import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
 
 interface AppContainer {
-    val filmRepository: FilmRepository
+    val getFilmUseCase: GetFilmUseCase
 }
 
-class AppDataContainer(private val context: Context) : AppContainer {
+class AppDataContainer(/*private val context: Context*/) : AppContainer {
     private val BASE_URL = "https://www.googleapis.com/books/v1/"
 
 
@@ -25,7 +25,7 @@ class AppDataContainer(private val context: Context) : AppContainer {
 
 
     private val retrofit: Retrofit = Retrofit.Builder()
-        .addConverterFactory( json.asConverterFactory("application/json".toMediaType()))
+        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .baseUrl(BASE_URL)
         .build()
 
@@ -35,8 +35,12 @@ class AppDataContainer(private val context: Context) : AppContainer {
     }
 
 
-    override val filmRepository: FilmRepository by lazy {
+    private val filmRepository: FilmRepository by lazy {
         FilmRemoteRepository(retrofitService)
+    }
+
+    override val getFilmUseCase: GetFilmUseCase by lazy {
+        GetFilmUseCase(filmRepository)
     }
 
 }

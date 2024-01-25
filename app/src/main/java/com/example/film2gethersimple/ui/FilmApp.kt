@@ -138,13 +138,41 @@ fun FilmApp(
         },
     ) { innerPadding ->
         //Row for rail and exp
-        if (navigationType == NavigationType.NAVIGATION_RAIL/* && currentScreen != NavigationScreens.DetailsScreen*/) {
-            Row {
-                FilmNavigationRail(
+        when (navigationType) {
+            NavigationType.NAVIGATION_RAIL/* && currentScreen != NavigationScreens.DetailsScreen*/ -> {
+                Row {
+                    FilmNavigationRail(
+                        navController = navController,
+                        screens = screens,
+                        contentPadding = innerPadding,
+                    )
+                    AppNavHost(
+                        navController = navController,
+                        uiState = viewModel.uiState,
+                        contentPadding = innerPadding,
+                        onHomeScreenCardClick = { viewModel.updateDetailsScreenStates(it) },
+                        contentType = contentType,
+                        onRetryButtonClick = { viewModel.initializeUIState() }
+                    )
+                }
+            }
+
+            NavigationType.PERMANENT_NAVIGATION_DRAWER -> {
+                FilmPermanentDrawer(
                     navController = navController,
-                    screens = screens,
+                    screens = listOf(
+                        NavigationScreens.HomeScreen,
+                        NavigationScreens.AccountScreen
+                    ),
                     contentPadding = innerPadding,
+                    uiState = viewModel.uiState,
+                    onHomeScreenCardClick = { viewModel.updateDetailsScreenStates(it) },
+                    contentType = contentType,
+                    onRetryButtonClick = { viewModel.initializeUIState() }
                 )
+            }
+
+            else -> {
                 AppNavHost(
                     navController = navController,
                     uiState = viewModel.uiState,
@@ -154,28 +182,6 @@ fun FilmApp(
                     onRetryButtonClick = { viewModel.initializeUIState() }
                 )
             }
-        } else if (navigationType == NavigationType.PERMANENT_NAVIGATION_DRAWER) {
-            FilmPermanentDrawer(
-                navController = navController,
-                screens = listOf(
-                    NavigationScreens.HomeScreen,
-                    NavigationScreens.AccountScreen
-                ),
-                contentPadding = innerPadding,
-                uiState = viewModel.uiState,
-                onHomeScreenCardClick = { viewModel.updateDetailsScreenStates(it) },
-                contentType = contentType,
-                onRetryButtonClick = { viewModel.initializeUIState() }
-            )
-        } else {
-            AppNavHost(
-                navController = navController,
-                uiState = viewModel.uiState,
-                contentPadding = innerPadding,
-                onHomeScreenCardClick = { viewModel.updateDetailsScreenStates(it) },
-                contentType = contentType,
-                onRetryButtonClick = { viewModel.initializeUIState() }
-            )
         }
     }
 }
@@ -209,5 +215,6 @@ fun TopFilmAppBar(
         } else {
             {}
         },
-    )
+
+        )
 }

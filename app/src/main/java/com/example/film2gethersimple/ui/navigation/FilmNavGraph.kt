@@ -40,7 +40,7 @@ fun AppNavHost(
             NavigationScreens.HomeScreen.name,
         modifier = modifier.padding(contentPadding),
     ) {
-
+    //Starting the main screen. Logic of Loading and Error are saved.
         composable(NavigationScreens.HomeScreen.name) {
             Log.i(TAG, "HomeScreen Started")
             when (uiState) {
@@ -62,13 +62,6 @@ fun AppNavHost(
                                 onHomeScreenCardClick(film)
                             })
                     }
-/*                    HomeFilmScreen(
-                        uiState = uiState,
-                        onHomeScreenCardClick = { film: Film ->
-                            onHomeScreenCardClick(film)
-                            navController.navigate(NavigationScreens.DetailsScreen.name)
-                        },
-                    )*/
                 }
 
                 is FilmUiState.Error -> {

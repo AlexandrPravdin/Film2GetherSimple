@@ -12,12 +12,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.film2gethersimple.FilmApplication
-import com.example.film2gethersimple.data.FilmRepository
+import com.example.film2gethersimple.data.GetFilmUseCase
 import com.example.film2gethersimple.data.local.LocalAccountDataProvider.account
-
 import com.example.film2gethersimple.ui.models.Account
 import com.example.film2gethersimple.ui.models.Film
-import com.example.film2gethersimple.ui.utils.convertDataToUi
 import kotlinx.coroutines.launch
 import java.io.IOException
 
@@ -39,7 +37,9 @@ sealed interface FilmUiState {
 }
 
 @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
-class FilmViewModel(private val filmRepository: FilmRepository) : ViewModel() {
+class FilmViewModel(
+    private val getFilmUseCase: GetFilmUseCase,
+) : ViewModel() {
 
     var uiState: FilmUiState by mutableStateOf(
         FilmUiState.Loading
@@ -55,7 +55,7 @@ class FilmViewModel(private val filmRepository: FilmRepository) : ViewModel() {
         uiState = FilmUiState.Loading
         viewModelScope.launch {
             uiState = try {
-                val response = filmRepository.getFilms().convertDataToUi()
+                val response = getFilmUseCase.getFormattedFilms()
                 FilmUiState.Success(
                     response = response,
                     account = account,
@@ -87,8 +87,8 @@ class FilmViewModel(private val filmRepository: FilmRepository) : ViewModel() {
             initializer {
                 val application =
                     (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as FilmApplication)
-                val filmRepository = application.container.filmRepository
-                FilmViewModel(filmRepository = filmRepository)
+                val getFilmUseCase = application.container.getFilmUseCase
+                FilmViewModel(getFilmUseCase = getFilmUseCase)
             }
         }
     }

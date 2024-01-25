@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.PermanentDrawerSheet
 import androidx.compose.material3.PermanentNavigationDrawer
 import androidx.compose.runtime.Composable
@@ -23,7 +22,7 @@ import com.example.film2gethersimple.ui.navigation.ScreensPermanentDrawerItem
 import com.example.film2gethersimple.ui.utils.ContentType
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun FilmPermanentDrawer(
     navController: NavHostController,
@@ -35,22 +34,20 @@ fun FilmPermanentDrawer(
     contentPadding: PaddingValues = PaddingValues(0.dp),
     onRetryButtonClick: () -> Unit,
 ) {
-    PermanentNavigationDrawer(
-        modifier = modifier,
-        drawerContent = {
-            PermanentDrawerSheet(
-                Modifier
-                    .width(dimensionResource(id = R.dimen.permanent_drawer_width))
-                    .padding(contentPadding)
-            ) {
-                screens.forEach { screen ->
-                    ScreensPermanentDrawerItem(
-                        screen = screen,
-                        navController = navController,
-                    )
-                }
+    PermanentNavigationDrawer(modifier = modifier, drawerContent = {
+        PermanentDrawerSheet(
+            Modifier
+                .width(dimensionResource(id = R.dimen.permanent_drawer_width))
+                .padding(contentPadding)
+        ) {
+            screens.forEach { screen ->
+                ScreensPermanentDrawerItem(
+                    screen = screen,
+                    navController = navController,
+                )
             }
-        }) {
+        }
+    }) {
         AppNavHost(
             navController = navController,
             uiState = uiState,
@@ -77,9 +74,7 @@ fun FilmListAndDetailScreen(
             modifier = Modifier.weight(1f)
         )
         DetailScreen(
-            film = currentFilm,
-            onBackPressed = { },
-            modifier = Modifier.weight(1f)
+            film = currentFilm, onBackPressed = { }, modifier = Modifier.weight(1f)
         )
     }
 }

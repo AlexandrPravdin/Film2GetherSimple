@@ -9,6 +9,6 @@ class FilmApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        container = AppDataContainer(context = this)
+        container = AppDataContainer(/*context = this*/)
     }
 }

@@ -129,7 +129,7 @@ fun FilmCard(
                         contentDescription = Icons.Outlined.DateRange.name
                     )
                     Text(
-                        text = iMDbRate.toString(),
+                        text = iMDbRate,
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.padding(
@@ -138,10 +138,7 @@ fun FilmCard(
                         )
                     )
                 }
-
-
             }
-
         }
     }
 }
