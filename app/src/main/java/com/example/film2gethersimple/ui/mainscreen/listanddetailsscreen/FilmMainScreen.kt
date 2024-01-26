@@ -14,7 +14,7 @@ import androidx.navigation.NavHostController
 import com.example.film2gethersimple.R
 import com.example.film2gethersimple.data.NavigationScreens
 import com.example.film2gethersimple.ui.mainscreen.detailscreen.DetailScreen
-import com.example.film2gethersimple.ui.mainscreen.homescreen.FilmUiState
+import com.example.film2gethersimple.ui.mainscreen.homescreen.HomeUiState
 import com.example.film2gethersimple.ui.mainscreen.homescreen.HomeScreenColumn
 import com.example.film2gethersimple.ui.models.Film
 import com.example.film2gethersimple.ui.navigation.AppNavHost
@@ -27,7 +27,7 @@ import com.example.film2gethersimple.ui.utils.ContentType
 fun FilmPermanentDrawer(
     navController: NavHostController,
     screens: List<NavigationScreens>,
-    uiState: FilmUiState,
+    uiState: HomeUiState,
     onHomeScreenCardClick: (Film) -> Unit,
     contentType: ContentType,
     modifier: Modifier = Modifier,

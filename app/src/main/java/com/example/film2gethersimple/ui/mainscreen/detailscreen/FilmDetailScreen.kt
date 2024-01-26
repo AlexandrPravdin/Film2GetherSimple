@@ -192,6 +192,7 @@ fun NameAndRateRowPreview() {
             "Drama", "Adventure", "Action", "Biography", "Adventure"
         ),
         publisherDate = "1982",
+        linkToGoogleBooks = "https://books.google.ru/books/about/Power_Play.html?hl=&id=je2dDAAAQBAJ&redir_esc=y"
     )
     NameAndRateRow(filmName = film.name, filmRate = "1981")
 }
@@ -208,6 +209,7 @@ fun FilmDetailPreview() {
             "Drama", "Adventure", "Action", "Biography", "Adventure"
         ),
         publisherDate = "1982",
+        linkToGoogleBooks = "https://books.google.ru/books/about/Power_Play.html?hl=&id=je2dDAAAQBAJ&redir_esc=y"
     )
     DetailScreen(
         film = film,

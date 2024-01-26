@@ -1,4 +1,4 @@
-package com.example.film2gethersimple.data.model
+package com.example.film2gethersimple.data.network
 
 import kotlinx.serialization.Serializable
 
@@ -31,9 +31,9 @@ data class VolumeInfo(
     val description: String? = null,
     val industryIdentifiers: List<IndustryIdentifier>? = null,
     val readingModes: ReadingModes,
-    val pageCount: Long,
+    val pageCount: Long? = null,
     val printType: String,
-    val categories: List<String>,
+    val categories: List<String> = listOf("No category"),
     val maturityRating: String,
     val allowAnonLogging: Boolean,
     val contentVersion: String,

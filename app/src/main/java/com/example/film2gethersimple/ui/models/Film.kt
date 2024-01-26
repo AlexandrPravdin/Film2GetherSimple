@@ -5,6 +5,7 @@ data class Film(
     val imageLink: String,
     val description: String?,
     val publisherDate: String,
-    val categories: List<String>
+    val categories: List<String>,
+    val linkToGoogleBooks: String,
 )
 

@@ -1,7 +1,10 @@
 package com.example.film2gethersimple.ui.mainscreen.homescreen
 
+import android.content.Context
+import android.content.Intent
 import android.net.http.HttpException
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresExtension
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,7 +23,7 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 
-sealed interface FilmUiState {
+sealed interface HomeUiState {
     data class Success(
         val response: List<Film>,
         //Selected Film
@@ -30,10 +33,13 @@ sealed interface FilmUiState {
         val account: Account?,
 
         var topAppBarTitle: String = ""
-    ) : FilmUiState
+    ) : HomeUiState
 
-    object Error : FilmUiState
-    object Loading : FilmUiState
+    data class Error(
+        val errorName: String?,
+    ) : HomeUiState
+
+    object Loading : HomeUiState
 }
 
 @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
@@ -41,8 +47,8 @@ class FilmViewModel(
     private val getFilmUseCase: GetFilmUseCase,
 ) : ViewModel() {
 
-    var uiState: FilmUiState by mutableStateOf(
-        FilmUiState.Loading
+    var uiState: HomeUiState by mutableStateOf(
+        HomeUiState.Loading
     )
         private set
 
@@ -52,36 +58,62 @@ class FilmViewModel(
 
     @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     fun initializeUIState() {
-        uiState = FilmUiState.Loading
+        uiState = HomeUiState.Loading
         viewModelScope.launch {
             uiState = try {
                 val response = getFilmUseCase.getFormattedFilms()
-                FilmUiState.Success(
+                HomeUiState.Success(
                     response = response,
                     account = account,
                     currentSelectedItem = response[0],
                     topAppBarTitle = "Films"
                 )
             } catch (e: IOException) {
-                FilmUiState.Error
+                HomeUiState.Error(errorName = e.message)
             } catch (e: HttpException) {
-                FilmUiState.Error
+                HomeUiState.Error(errorName = e.message)
+            }
+        }
+    }
+
+
+    fun shareCurrentBook(context: Context) {
+        when (uiState) {
+            is HomeUiState.Success -> {
+                val currentFilm = (uiState as HomeUiState.Success).currentSelectedItem
+                val sendIntent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(
+                        Intent.EXTRA_TEXT,
+                        "Just look at the \"${currentFilm.name}\"!\n\n" + currentFilm.linkToGoogleBooks
+                    )
+                    type = "text/plan"
+                }
+                val shareIntent = Intent.createChooser(sendIntent, null)
+                context.startActivity(shareIntent)
+            }
+
+            is HomeUiState.Loading -> {
+                val toast = Toast.makeText(context, "We are just loading!", Toast.LENGTH_SHORT)
+                toast.show()
+            }
+
+            is HomeUiState.Error -> {
+                val toast = Toast.makeText(context, "Some problems", Toast.LENGTH_SHORT)
+                toast.show()
             }
         }
     }
 
     //Going to the detail screen
     fun updateDetailsScreenStates(film: Film) {
-        uiState = (uiState as FilmUiState.Success).copy(
+        uiState = (uiState as HomeUiState.Success).copy(
             currentSelectedItem = film,
             topAppBarTitle = film.name,
         )
     }
 
-
-//Узнать, как обновлять переменные
-
-
+    //Узнать, как обновлять переменные
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
@@ -92,5 +124,4 @@ class FilmViewModel(
             }
         }
     }
-
 }

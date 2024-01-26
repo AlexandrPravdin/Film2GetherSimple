@@ -1,6 +1,5 @@
 package com.example.film2gethersimple.data
 
-import android.content.Context
 import com.example.film2gethersimple.data.network.FilmApiService
 import com.example.film2gethersimple.data.network.FilmRemoteRepository
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory

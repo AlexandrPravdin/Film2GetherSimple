@@ -38,14 +38,14 @@ import com.example.film2gethersimple.ui.models.Film
 //Home screen have column with all films
 @Composable
 fun HomeFilmScreen(
-    uiState: FilmUiState,
+    uiState: HomeUiState,
     onHomeScreenCardClick: (Film) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
     HomeScreenColumn(
         onHomeScreenCardClick = onHomeScreenCardClick,
-        allFilms = (uiState as FilmUiState.Success).response,
+        allFilms = (uiState as HomeUiState.Success).response,
         contentPadding = contentPadding,
     )
 }
@@ -155,9 +155,10 @@ fun HomeFilmScreenPreview() {
             "Drama", "Adventure", "Action", "Biography", "Adventure"
         ),
         publisherDate = "1982",
+        linkToGoogleBooks = "https://books.google.ru/books/about/Power_Play.html?hl=&id=je2dDAAAQBAJ&redir_esc=y"
     )
     val response = listOf(film, film, film)
-    val homeUiState = FilmUiState.Success(
+    val homeUiState = HomeUiState.Success(
         response = response,
         account = LocalAccountDataProvider.account,
         currentSelectedItem = response[0],
@@ -182,6 +183,7 @@ fun FilmCardPreview() {
             "Drama", "Adventure", "Action", "Biography", "Adventure"
         ),
         publisherDate = "1982",
+        linkToGoogleBooks = "https://books.google.ru/books/about/Power_Play.html?hl=&id=je2dDAAAQBAJ&redir_esc=y"
     )
     FilmCard(filmName = film.name,
         iMDbRate = film.publisherDate,

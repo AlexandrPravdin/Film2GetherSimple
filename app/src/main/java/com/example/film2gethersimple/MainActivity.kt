@@ -25,7 +25,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                 ) {
                     val windowSize = calculateWindowSizeClass(this)
-                    FilmApp(windowSize.widthSizeClass)
+                    FilmApp(
+                        windowSize.widthSizeClass,
+                    )
                 }
             }
         }
