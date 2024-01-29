@@ -9,8 +9,11 @@ import androidx.annotation.RequiresExtension
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.film2gethersimple.ui.FilmApp
 
 class MainActivity : ComponentActivity() {
@@ -35,7 +38,7 @@ class MainActivity : ComponentActivity() {
 }
 
 
-/*
+@RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 @Preview(showBackground = true, widthDp = 400)
 @Composable
 fun GreetingPreviewCompact() {
@@ -44,6 +47,7 @@ fun GreetingPreviewCompact() {
     }
 }
 
+@RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 @Preview(showBackground = true, widthDp = 800)
 @Composable
 fun GreetingPreviewMedium() {
@@ -52,6 +56,7 @@ fun GreetingPreviewMedium() {
     }
 }
 
+@RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 @Preview(showBackground = true, widthDp = 1200)
 @Composable
 fun GreetingPreviewExpanded() {
@@ -59,4 +64,4 @@ fun GreetingPreviewExpanded() {
         FilmApp(windowSize = WindowWidthSizeClass.Expanded)
     }
 }
-*/
+

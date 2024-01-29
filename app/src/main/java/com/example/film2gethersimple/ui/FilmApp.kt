@@ -125,7 +125,7 @@ fun FilmApp(
                             navController.popBackStack()
                         },
                         isShowingShareButton = true,
-                        onShareButtonClicked = {viewModel.shareCurrentBook(context = context)})
+                        onShareButtonClicked = { viewModel.shareCurrentBook(context = context) })
                 }
                 //Top app bar for ListAndDetailsScreen
             }

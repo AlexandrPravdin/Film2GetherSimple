@@ -15,7 +15,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.film2gethersimple.FilmApplication
-import com.example.film2gethersimple.data.GetFilmUseCase
+import com.example.film2gethersimple.data.FilmRepository
 import com.example.film2gethersimple.data.local.LocalAccountDataProvider.account
 import com.example.film2gethersimple.ui.models.Account
 import com.example.film2gethersimple.ui.models.Film
@@ -44,7 +44,7 @@ sealed interface HomeUiState {
 
 @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 class FilmViewModel(
-    private val getFilmUseCase: GetFilmUseCase,
+    private val filmRepository: FilmRepository,
 ) : ViewModel() {
 
     var uiState: HomeUiState by mutableStateOf(
@@ -61,7 +61,7 @@ class FilmViewModel(
         uiState = HomeUiState.Loading
         viewModelScope.launch {
             uiState = try {
-                val response = getFilmUseCase.getFormattedFilms()
+                val response = filmRepository.getFilms()
                 HomeUiState.Success(
                     response = response,
                     account = account,
@@ -119,8 +119,8 @@ class FilmViewModel(
             initializer {
                 val application =
                     (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as FilmApplication)
-                val getFilmUseCase = application.container.getFilmUseCase
-                FilmViewModel(getFilmUseCase = getFilmUseCase)
+                val filmRepository = application.container.filmRepository
+                FilmViewModel(filmRepository = filmRepository)
             }
         }
     }
