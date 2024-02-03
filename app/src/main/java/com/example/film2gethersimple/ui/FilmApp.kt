@@ -38,6 +38,10 @@ import com.example.film2gethersimple.ui.utils.NavigationType
 private const val TAG = "FilmApp"
 
 //App at all
+
+
+//ToDo - вынести вью модел в нав хост
+//ToDo - спросить насчет того, Где должен находиться top app bar.
 @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 @Composable
 fun FilmApp(
@@ -45,7 +49,7 @@ fun FilmApp(
     modifier: Modifier = Modifier,
 ) {
     //viewModel architecture
-    val viewModel: FilmViewModel = viewModel(factory = FilmViewModel.Factory)
+    val viewModel: FilmViewModel = viewModel(factory = AppViewModelProvider.Factory)
     val context: Context = LocalContext.current
 
     //navigation logic

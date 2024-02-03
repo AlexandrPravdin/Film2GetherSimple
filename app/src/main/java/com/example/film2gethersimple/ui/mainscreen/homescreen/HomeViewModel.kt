@@ -9,12 +9,9 @@ import androidx.annotation.RequiresExtension
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.film2gethersimple.FilmApplication
 import com.example.film2gethersimple.data.FilmRepository
 import com.example.film2gethersimple.data.local.LocalAccountDataProvider.account
 import com.example.film2gethersimple.ui.models.Account
@@ -44,6 +41,7 @@ sealed interface HomeUiState {
 
 @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 class FilmViewModel(
+    savedStateHandle: SavedStateHandle,
     private val filmRepository: FilmRepository,
 ) : ViewModel() {
 
@@ -114,7 +112,7 @@ class FilmViewModel(
     }
 
     //Узнать, как обновлять переменные
-    companion object {
+    /*companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application =
@@ -123,5 +121,5 @@ class FilmViewModel(
                 FilmViewModel(filmRepository = filmRepository)
             }
         }
-    }
+    }*/
 }

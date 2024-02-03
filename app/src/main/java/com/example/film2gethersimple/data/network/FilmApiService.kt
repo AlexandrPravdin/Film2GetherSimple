@@ -7,6 +7,6 @@ import retrofit2.http.GET
 
 //
 interface FilmApiService {
-    @GET("volumes?q=game")
+    @GET("volumes?q=попа")
     suspend fun getPhotos(): Response
 }
