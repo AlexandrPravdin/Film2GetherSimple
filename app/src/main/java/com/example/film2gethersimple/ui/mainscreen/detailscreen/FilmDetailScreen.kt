@@ -1,5 +1,7 @@
 package com.example.film2gethersimple.ui.mainscreen.detailscreen
 
+import android.content.Context
+import android.content.Intent
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -34,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.film2gethersimple.R
+import com.example.film2gethersimple.ui.TopFilmAppBar
 import com.example.film2gethersimple.ui.models.Film
 
 
@@ -47,6 +51,35 @@ fun DetailScreen(
     BackHandler {
         onBackPressed()
     }
+    val context = LocalContext.current
+    Scaffold(
+        topBar = {
+            TopFilmAppBar(title = film.name,
+                isShowingBackButton = true,
+                onBackButtonClicked = {
+                    onBackPressed()
+                },
+                isShowingShareButton = true,
+                onShareButtonClicked = {
+                    shareCurrentBook(
+                        film = film,
+                        context = context
+                    )
+                })
+        }
+    ) { paddingValues ->
+        DetailColumn(
+            film = film,
+            modifier = modifier.padding(paddingValues = paddingValues),
+        )
+    }
+}
+
+@Composable
+fun DetailColumn(
+    film: Film,
+    modifier: Modifier = Modifier,
+) {
     LazyColumn(
         modifier = modifier
             .padding(
@@ -181,6 +214,23 @@ fun FilmPoster(
     )
 }
 
+fun shareCurrentBook(
+    film: Film,
+    context: Context
+) {
+    val sendIntent = Intent().apply {
+        action = Intent.ACTION_SEND
+        putExtra(
+            Intent.EXTRA_TEXT,
+            "Just look at the \"${film.name}\"!\n\n" + film.linkToGoogleBooks
+        )
+        type = "text/plan"
+    }
+    val shareIntent = Intent.createChooser(sendIntent, null)
+    context.startActivity(shareIntent)
+}
+
+
 @Preview(showBackground = true)
 @Composable
 fun NameAndRateRowPreview() {
@@ -217,4 +267,5 @@ fun FilmDetailPreview() {
         modifier = Modifier.background(MaterialTheme.colorScheme.background)
     )
 }
+
 

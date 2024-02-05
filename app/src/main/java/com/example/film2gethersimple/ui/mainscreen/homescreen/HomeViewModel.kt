@@ -74,35 +74,6 @@ class FilmViewModel(
         }
     }
 
-
-    fun shareCurrentBook(context: Context) {
-        when (uiState) {
-            is HomeUiState.Success -> {
-                val currentFilm = (uiState as HomeUiState.Success).currentSelectedItem
-                val sendIntent = Intent().apply {
-                    action = Intent.ACTION_SEND
-                    putExtra(
-                        Intent.EXTRA_TEXT,
-                        "Just look at the \"${currentFilm.name}\"!\n\n" + currentFilm.linkToGoogleBooks
-                    )
-                    type = "text/plan"
-                }
-                val shareIntent = Intent.createChooser(sendIntent, null)
-                context.startActivity(shareIntent)
-            }
-
-            is HomeUiState.Loading -> {
-                val toast = Toast.makeText(context, "We are just loading!", Toast.LENGTH_SHORT)
-                toast.show()
-            }
-
-            is HomeUiState.Error -> {
-                val toast = Toast.makeText(context, "Some problems", Toast.LENGTH_SHORT)
-                toast.show()
-            }
-        }
-    }
-
     //Going to the detail screen
     fun updateDetailsScreenStates(film: Film) {
         uiState = (uiState as HomeUiState.Success).copy(
@@ -111,15 +82,4 @@ class FilmViewModel(
         )
     }
 
-    //Узнать, как обновлять переменные
-    /*companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val application =
-                    (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as FilmApplication)
-                val filmRepository = application.container.filmRepository
-                FilmViewModel(filmRepository = filmRepository)
-            }
-        }
-    }*/
 }

@@ -18,6 +18,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,12 +27,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.film2gethersimple.R
 import com.example.film2gethersimple.data.local.LocalAccountDataProvider
+import com.example.film2gethersimple.ui.TopFilmAppBar
 import com.example.film2gethersimple.ui.models.Film
 
 
@@ -41,13 +44,22 @@ fun HomeFilmScreen(
     uiState: HomeUiState,
     onHomeScreenCardClick: (Film) -> Unit,
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
-    HomeScreenColumn(
-        onHomeScreenCardClick = onHomeScreenCardClick,
-        allFilms = (uiState as HomeUiState.Success).response,
-        contentPadding = contentPadding,
-    )
+    Scaffold(
+        topBar = {
+            TopFilmAppBar(title = stringResource(id = R.string.home_screen),
+                isShowingBackButton = false,
+                onBackButtonClicked = {} //On button clicked should to refactor
+            )
+        }
+    ) { paddingValues ->
+        HomeScreenColumn(
+            onHomeScreenCardClick = onHomeScreenCardClick,
+            allFilms = (uiState as HomeUiState.Success).response,
+            modifier = modifier.padding(paddingValues = paddingValues)
+        )
+    }
+
 }
 
 
@@ -57,7 +69,6 @@ fun HomeScreenColumn(
     onHomeScreenCardClick: (Film) -> Unit,
     allFilms: List<Film>,
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
     LazyColumn(
         content = {
@@ -75,7 +86,6 @@ fun HomeScreenColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
         contentPadding = PaddingValues(
             horizontal = dimensionResource(id = R.dimen.large),
-            contentPadding.calculateTopPadding()
         ), //contentPadding
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.large)),
         modifier = modifier.background(MaterialTheme.colorScheme.background)
@@ -168,6 +178,7 @@ fun HomeFilmScreenPreview() {
     HomeFilmScreen(
         uiState = homeUiState,
         onHomeScreenCardClick = {},
+        modifier = Modifier
     )
 }
 

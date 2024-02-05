@@ -96,44 +96,6 @@ fun FilmApp(
 
     Scaffold(
         modifier = modifier,
-        topBar = {
-            //Top app bar have the another functional, forEach screen the forEach function
-            when (currentScreen) {
-                //Top app bar for Home Screen
-                NavigationScreens.HomeScreen -> {
-                    if (contentType == ContentType.ListOnly) {
-                        TopFilmAppBar(title = stringResource(id = R.string.home_screen),
-                            isShowingBackButton = false,
-                            onBackButtonClicked = {} //On button clicked should to refactor
-                        )
-                    } else {
-                        TopFilmAppBar(title = stringResource(NavigationScreens.HomeScreen.title),
-                            isShowingBackButton = false,
-                            onBackButtonClicked = {},
-                            isShowingShareButton = true,
-                            onShareButtonClicked = { viewModel.shareCurrentBook(context = context) })
-
-                    }
-                }
-                //Top app bar for AccountScreen
-                NavigationScreens.AccountScreen -> {
-                    TopFilmAppBar(title = stringResource(NavigationScreens.AccountScreen.title),
-                        isShowingBackButton = false,
-                        onBackButtonClicked = {})
-                }
-                //Top app bar DetailsScreen
-                NavigationScreens.DetailsScreen -> {
-                    TopFilmAppBar(title = (viewModel.uiState as HomeUiState.Success).currentSelectedItem.name,
-                        isShowingBackButton = true,
-                        onBackButtonClicked = {
-                            navController.popBackStack()
-                        },
-                        isShowingShareButton = true,
-                        onShareButtonClicked = { viewModel.shareCurrentBook(context = context) })
-                }
-                //Top app bar for ListAndDetailsScreen
-            }
-        },
 
         bottomBar = {
             //Bottom bar showing only when Navigation Type is BOTTOM_NAVIGATION

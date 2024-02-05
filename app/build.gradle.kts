@@ -95,4 +95,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
 
 
+    //Datastore
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
 }

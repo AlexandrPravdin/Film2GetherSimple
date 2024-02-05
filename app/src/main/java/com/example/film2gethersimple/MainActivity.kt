@@ -22,17 +22,19 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Film2GetherSimpleTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                ) {
-                    val windowSize = calculateWindowSizeClass(this)
-                    FilmApp(
-                        windowSize.widthSizeClass,
-                    )
+            Film2GetherSimpleTheme (
+                content = {
+                    // A surface container using the 'background' color from the theme
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                    ) {
+                        val windowSize = calculateWindowSizeClass(this)
+                        FilmApp(
+                            windowSize.widthSizeClass,
+                        )
+                    }
                 }
-            }
+            )
         }
     }
 }
@@ -42,26 +44,26 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true, widthDp = 400)
 @Composable
 fun GreetingPreviewCompact() {
-    Film2GetherSimpleTheme {
+    Film2GetherSimpleTheme (content = {
         FilmApp(windowSize = WindowWidthSizeClass.Compact)
-    }
+    })
 }
 
 @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 @Preview(showBackground = true, widthDp = 800)
 @Composable
 fun GreetingPreviewMedium() {
-    Film2GetherSimpleTheme {
+    Film2GetherSimpleTheme (content = {
         FilmApp(windowSize = WindowWidthSizeClass.Medium)
-    }
+    })
 }
 
 @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 @Preview(showBackground = true, widthDp = 1200)
 @Composable
 fun GreetingPreviewExpanded() {
-    Film2GetherSimpleTheme {
+    Film2GetherSimpleTheme (content = {
         FilmApp(windowSize = WindowWidthSizeClass.Expanded)
-    }
+    })
 }
 

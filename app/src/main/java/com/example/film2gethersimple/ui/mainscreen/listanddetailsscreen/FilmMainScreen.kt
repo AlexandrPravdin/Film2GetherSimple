@@ -6,21 +6,25 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.PermanentDrawerSheet
 import androidx.compose.material3.PermanentNavigationDrawer
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.film2gethersimple.R
 import com.example.film2gethersimple.data.NavigationScreens
-import com.example.film2gethersimple.ui.mainscreen.detailscreen.DetailScreen
-import com.example.film2gethersimple.ui.mainscreen.homescreen.HomeUiState
+import com.example.film2gethersimple.ui.TopFilmAppBar
+import com.example.film2gethersimple.ui.mainscreen.detailscreen.DetailColumn
+import com.example.film2gethersimple.ui.mainscreen.detailscreen.shareCurrentBook
 import com.example.film2gethersimple.ui.mainscreen.homescreen.HomeScreenColumn
+import com.example.film2gethersimple.ui.mainscreen.homescreen.HomeUiState
 import com.example.film2gethersimple.ui.models.Film
 import com.example.film2gethersimple.ui.navigation.AppNavHost
 import com.example.film2gethersimple.ui.navigation.ScreensPermanentDrawerItem
 import com.example.film2gethersimple.ui.utils.ContentType
-
 
 
 @Composable
@@ -67,15 +71,33 @@ fun FilmListAndDetailScreen(
     currentFilm: Film,
     onHomeScreenCardClick: (Film) -> Unit,
 ) {
-    Row {
-        HomeScreenColumn(
-            onHomeScreenCardClick = onHomeScreenCardClick,
-            allFilms = allFilms,
-            modifier = Modifier.weight(1f)
-        )
-        DetailScreen(
-            film = currentFilm, onBackPressed = { }, modifier = Modifier.weight(1f)
-        )
+    val context = LocalContext.current
+    Scaffold(
+        topBar = {
+            TopFilmAppBar(title = stringResource(NavigationScreens.HomeScreen.title),
+                isShowingBackButton = false,
+                isShowingShareButton = true,
+                onShareButtonClicked = {
+                    shareCurrentBook(film = currentFilm, context = context)
+                })
+        }
+    ) { paddingValues ->
+        Row {
+            HomeScreenColumn(
+                onHomeScreenCardClick = onHomeScreenCardClick,
+                allFilms = allFilms,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(paddingValues)
+            )
+            DetailColumn(
+                film = currentFilm,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(paddingValues)
+            )
+        }
+
     }
 }
 
