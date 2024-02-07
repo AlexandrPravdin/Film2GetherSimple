@@ -3,7 +3,6 @@ package com.example.film2gethersimple.ui
 import android.os.Build
 import androidx.annotation.RequiresExtension
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -16,8 +15,7 @@ object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
             FilmViewModel(
-                this.createSavedStateHandle(),
-                appApplication ().container.filmRepository
+                appApplication().container.filmRepository
             )
         }
         initializer {
